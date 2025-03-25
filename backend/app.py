@@ -1,5 +1,5 @@
 """
-Backend FastAPI per RIQA Chatbot Interface con supporto per interfaccia grafica e connessioni remote.
+Backend FastAPI per AI_RIQA Chatbot Interface con supporto per interfaccia grafica e connessioni remote.
 """
 
 from fastapi import FastAPI, WebSocket, UploadFile, File
@@ -13,7 +13,7 @@ from PIL import Image
 import asyncio
 import os
 
-app = FastAPI(title="RIQA Chatbot Server")
+app = FastAPI(title="AI_RIQA Chatbot Server")
 core = RIQACore()
 
 # Monta i file statici per il frontend
@@ -93,7 +93,7 @@ async def websocket_chat(websocket: WebSocket):
         await websocket.send_json({"result": result, "client_id": client_id})
     await websocket.close()
 
-# Endpoint per simulazioni remote (unificato con /simulate)
+# Endpoint per simulazioni (remote o locali)
 @app.post("/simulate")
 async def run_simulation(sim_type: str, params: dict, client_id: str = "anonymous"):
     """
@@ -103,7 +103,7 @@ async def run_simulation(sim_type: str, params: dict, client_id: str = "anonymou
     save_simulation(sim_type, params, result)
     return {"result": result, "client_id": client_id}
 
-# WebSocket unificato per simulazioni e chat remote
+# WebSocket per simulazioni in streaming (unificato)
 @app.websocket("/ws/simulation")
 async def websocket_simulation(websocket: WebSocket):
     """
