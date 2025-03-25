@@ -93,21 +93,21 @@ async def websocket_chat(websocket: WebSocket):
         await websocket.send_json({"result": result, "client_id": client_id})
     await websocket.close()
 
-# Endpoint per simulazioni remote
+# Endpoint per simulazioni remote (unificato con /simulate)
 @app.post("/simulate")
 async def run_simulation(sim_type: str, params: dict, client_id: str = "anonymous"):
     """
-    Esegue una simulazione remota e salva i risultati nel database.
+    Esegue una simulazione remota o locale e salva i risultati nel database.
     """
     result = core.run_simulation(sim_type, params)
     save_simulation(sim_type, params, result)
     return {"result": result, "client_id": client_id}
 
-# WebSocket per simulazioni remote in streaming
+# WebSocket unificato per simulazioni e chat remote
 @app.websocket("/ws/simulation")
 async def websocket_simulation(websocket: WebSocket):
     """
-    Stream dei risultati delle simulazioni remote in tempo reale.
+    Stream dei risultati delle simulazioni (chat o remote) in tempo reale.
     """
     await websocket.accept()
     data = await websocket.receive_json()
