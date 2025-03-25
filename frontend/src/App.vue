@@ -47,8 +47,12 @@ export default {
       console.log('Salvataggio su cloud o dispositivo...');
     },
     async login() {
-      const result = await signInWithPopup(auth, googleProvider);
-      this.user = result.user;
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        this.user = result.user;
+      } catch (error) {
+        console.error("Errore di login:", error);
+      }
     },
     async logout() {
       await signOut(auth);
