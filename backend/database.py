@@ -1,4 +1,3 @@
-# RIQA_Chatbot/backend/database.py
 import sqlite3  # Usiamo SQLite per semplicità
 
 def get_connection():
