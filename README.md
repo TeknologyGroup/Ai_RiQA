@@ -15,7 +15,7 @@ Passo 1: Clonare o Scaricare il Progetto
 	
 2	cd AI_RIQA
 	
-3   Scarica Manualmente:
+3   (opzionale)Scarica Manualmente:
 	◦	Vai su GitHub, scarica il progetto come ZIP, estrailo e entra nella cartella AI_RIQA.
 
 Passo 2: Installare le Dipendenze
@@ -25,20 +25,32 @@ Il progetto richiede librerie Python per il backend e Node.js per il frontend.
 	◦	source venv/bin/activate  # Linux/macOS
 	◦	venv\Scripts\activate     # Windows
 	◦	
-	◦	Installa le dipendenze: pip install -r requirements.txt
-	◦	
-	◦	Contenuto di requirements.txt (assicurati che sia presente): fastapi==0.115.0
+	
+◦	Installa le dipendenze: pip install -r requirements.txt
+◦	Contenuto di requirements.txt (assicurati che sia presente): 
+
+	◦	fastapi==0.115.0
+
 	◦	uvicorn==0.30.6
+
 	◦	numpy==1.26.4
+
 	◦	scipy==1.13.0
+
 	◦	qiskit==0.46.0
+
 	◦	requests==2.31.0
+
 	◦	pytesseract==0.3.10
+
 	◦	pillow==10.4.0
+
 	◦	matplotlib==3.9.2
+
 	◦	psycopg2-binary==2.9.9
-	◦	
-	2	Frontend (Vue.js):
+
+	◦	2	Frontend (Vue.js):
+
 	◦	Entra nella directory del frontend: cd frontend
 	◦	
 	◦	Installa le dipendenze Node.js: npm install
