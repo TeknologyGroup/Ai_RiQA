@@ -246,7 +246,9 @@ Passo 7: Testare il Chatbot
         ◦	print(result)
 	
    	
-	6	Risultati Condivisi:
+
+
+6	Risultati Condivisi:
 
         ◦	Vai a http://localhost:8000/shared_results per vedere i dati salvati nel database.
 
