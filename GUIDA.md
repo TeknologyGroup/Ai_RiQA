@@ -54,32 +54,14 @@ Il progetto richiede librerie Python per il backend e Node.js per il frontend.
 
 	
         ◦	fastapi==0.115.0
-
-	
         ◦	uvicorn==0.30.6
-
-	
         ◦	numpy==1.26.4
-
-
-	◦	scipy==1.13.0
-
-
+        ◦	scipy==1.13.0
 	◦	qiskit==0.46.0
-
-
 	◦	requests==2.31.0
-
-
 	◦	pytesseract==0.3.10
-
-
 	◦	pillow==10.4.0
-
-
 	◦	matplotlib==3.9.2
-
-
 	◦	psycopg2-binary==2.9.9
 
 
