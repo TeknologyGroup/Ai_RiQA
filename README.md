@@ -12,8 +12,10 @@ Prerequisiti
 
 Passo 1: Clonare o Scaricare il Progetto
 	1	Clona il Repository: git clone https://github.com/TeknologyGroup/AI_RIQA.git
-	2	cd AI_RIQA
-	3   Scarica Manualmente:
+	
+2	cd AI_RIQA
+	
+3   Scarica Manualmente:
 	◦	Vai su GitHub, scarica il progetto come ZIP, estrailo e entra nella cartella AI_RIQA.
 
 Passo 2: Installare le Dipendenze
