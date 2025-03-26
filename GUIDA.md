@@ -84,20 +84,22 @@ Il progetto richiede librerie Python per il backend e Node.js per il frontend.
 
 
 
-	◦	2	Frontend (Vue.js):
+
+ 
+ 
+ 2	Frontend (Vue.js):
 
 
 	◦	Entra nella directory del frontend: cd frontend
-
-        ◦	
+ 
 	
         ◦	Installa le dipendenze Node.js: npm install
 	
-        ◦	
+        	
 	
         ◦	Torna alla directory principale: cd ..
 	
-        ◦	
+        	
 	
         3	Tesseract OCR (per il caricamento di immagini):
 	
@@ -113,17 +115,18 @@ Passo 3: Configurare il Database
 
 AI_RIQA supporta SQLite (default) o PostgreSQL. Scegli uno dei due.
 
-        1	SQLite (Default):
+        
+	1	SQLite (Default):
 	
         ◦	Non richiede configurazione aggiuntiva.
 	
         ◦	Esegui: python backend/database.py
+		
+	◦	Verrà creato un file riqa.db nella directory principale.
 	
-        ◦	
+        
 	
-        ◦	Verrà creato un file riqa.db nella directory principale.
-	
-        2	PostgreSQL (Opzionale):
+ 2	PostgreSQL (Opzionale):
 	
         ◦	Installa PostgreSQL localmente o usa un servizio cloud (es. Heroku, AWS).
 	
@@ -137,8 +140,7 @@ AI_RIQA supporta SQLite (default) o PostgreSQL. Scegli uno dei due.
 	
         ◦	Inizializza il database: python backend/database.py
 	
-        ◦	
-
+        	
 
 Passo 4: Configurare Firebase (Login con Google)
 
@@ -148,33 +150,31 @@ Passo 4: Configurare Firebase (Login con Google)
 	
         ◦	Abilita l’autenticazione e configura il provider “Google”.
 	
+
+	
         2	Aggiorna firebase.js:
 	
         ◦	Trova le credenziali nella sezione “Configurazione Web” del tuo progetto Firebase.
 	
-        ◦	Modifica AI_RIQA/frontend/src/firebase.js: const firebaseConfig = {
+        ◦	Modifica AI_RIQA/frontend/src/firebase.js: 
 	
-        ◦	  apiKey: "YOUR_API_KEY",
+                  const firebaseConfig = {
+		  apiKey: "YOUR_API_KEY",
+		  authDomain: "YOUR_AUTH_DOMAIN",
+		  projectId: "YOUR_PROJECT_ID",
+		  storageBucket: "YOUR_STORAGE_BUCKET",
+		  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+		  appId: "YOUR_APP_ID"
+		};
 	
-        ◦	  authDomain: "YOUR_AUTH_DOMAIN",
+        
+		firebase.initializeApp(firebaseConfig);
 	
-        ◦	  projectId: "YOUR_PROJECT_ID",
+        	export const auth = firebase.auth();
+		export const googleProvider = new firebase.auth.GoogleAuthProvider();
 	
-        ◦	  storageBucket: "YOUR_STORAGE_BUCKET",
-	
-        ◦	  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-	
-        ◦	  appId: "YOUR_APP_ID"
-	
-        ◦	};
-	
-        ◦	firebase.initializeApp(firebaseConfig);
-	
-        ◦	export const auth = firebase.auth();
-	
-        ◦	export const googleProvider = new firebase.auth.GoogleAuthProvider();
-	
-        ◦	
+
+	 
 	
 3	Aggiungi Firebase al Frontend:
 	
@@ -193,7 +193,7 @@ Passo 5: Avviare il Server Backend
 	
         ◦	Testa un endpoint, ad esempio: curl -X POST "http://localhost:8000/chat" -H "Content-Type: application/json" -d '{"message": "x^2"}'
 
-        ◦	
+        
 
 
 Passo 6: Avviare l’Interfaccia Grafica
@@ -206,10 +206,14 @@ Passo 6: Avviare l’Interfaccia Grafica
 	
        ◦	Il frontend sarà disponibile su http://localhost:8080 (o una porta simile indicata nel terminale).
 
+       
+       
        2	Accesso Statico (Alternativa)**:
 	
        ◦	Se non vuoi usare npm run serve, il backend serve già i file statici. Vai direttamente a: http://localhost:8000/static/index.html
 		
+
+
 
 Passo 7: Testare il Chatbot
 
@@ -247,6 +251,8 @@ Passo 7: Testare il Chatbot
         ◦	Vai a http://localhost:8000/shared_results per vedere i dati salvati nel database.
 
 
+
+
 Passo 8: Configurazioni Avanzate (Opzionale)
 
         1	Deploy su Server Remoto:
@@ -266,6 +272,8 @@ Passo 8: Configurazioni Avanzate (Opzionale)
        3	Personalizzazione:
 	
        ◦	Modifica i colori in frontend/src/assets/style.css o aggiungi nuove simulazioni in core.py.
+
+
 
 
 Risoluzione dei Problemi
@@ -288,6 +296,8 @@ Risoluzione dei Problemi
         •	Database non funziona:
 	
         ◦	Controlla le variabili d’ambiente per PostgreSQL o il percorso di riqa.db per SQLite.
+
+
 
 
 Esempi di Utilizzo
