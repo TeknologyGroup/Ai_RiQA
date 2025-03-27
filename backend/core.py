@@ -129,6 +129,31 @@ class RIQACore:
             raise ValueError(f"Tipo di simulazione '{sim_type}' non supportato")
         return getattr(self, f"simulate_{sim_type}")(params)
 
+def simulate_advanced_physics(self, params):
+    """
+    Simula moto parabolico con resistenza dell'aria
+    """
+    def projectile_motion(t, y, g, k):
+        x, y, vx, vy = y
+        dx_dt = vx
+        dy_dt = vy
+        dvx_dt = -k * vx
+        dvy_dt = -g - k * vy
+        return [dx_dt, dy_dt, dvx_dt, dvy_dt]
+    
+    t_span = params.get('time_range', [0, 10])
+    y0 = params.get('initial_conditions', [0, 0, 20, 20])
+    g = params.get('gravity', 9.81)
+    k = params.get('air_resistance', 0.1)
+    
+    sol = solve_ivp(projectile_motion, t_span, y0, args=(g, k))
+    return {
+        'x': sol.y[0].tolist(),
+        'y': sol.y[1].tolist(),
+        'vx': sol.y[2].tolist(),
+        'vy': sol.y[3].tolist()
+    }
+
 if __name__ == "__main__":
     # Test del core
     core = RIQACore()
