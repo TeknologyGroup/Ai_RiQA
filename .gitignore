@@ -1,0 +1,8 @@
+# File ignorati globali
+venv/
+*.swp
+*.swo
+frontend/dist/
+frontend/node_modules/
+.firebase/
+firebase-debug.log
