@@ -10,7 +10,21 @@ from pathlib import Path
 import os
 from typing import Dict, Any
 from pydantic import BaseModel
+from .auth import create_access_token, get_current_user
 
+@app.post("/token")
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    # Verifica credenziali (esempio base)
+    if form_data.username != "admin" or form_data.password != "password":
+        raise HTTPException(status_code=400, detail="Credenziali non valide")
+    
+    access_token = create_access_token(data={"sub": form_data.username})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.get("/protected")
+async def protected_route(current_user: dict = Depends(get_current_user)):
+    return {"message": "Area protetta", "user": current_user}
+    
 # Importa il core dalla stessa directory
 from .core import RIQACore
 
