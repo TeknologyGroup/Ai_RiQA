@@ -11,24 +11,29 @@ import {
 } from 'firebase/firestore';
 
 const devConfig = {
-  apiKey: process.env.VUE_APP_FIREBASE_API_KEY || "AIzaSyASWWmeByDWyd-qC6aPF9f2MX6HY6wq0i4",
-  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN || "ai-riqa.firebaseapp.com",
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
   projectId: "ai-riqa-dev",
   storageBucket: "ai-riqa-dev.appspot.com",
-  messagingSenderId: "1057289763194",
-  appId: "1:1057289763194:web:bb48ac936910e25a01bec3"
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID
 };
 
 const prodConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
-  authDomain: "ai-riqa.web.app",
-  projectId: "ai-riqa",
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  project'sId: "ai-riqa",
   storageBucket: "ai-riqa.appspot.com",
-  messagingSenderId: "1057289763194",
-  appId: "1:1057289763194:web:bb48ac936910e25a01bec3"
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID
 };
 
 const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig;
+
+// Verifica che le variabili siano definite
+if (!config.apiKey || !config.authDomain || !config.appId) {
+  throw new Error("Firebase configuration is incomplete. Check your environment variables.");
+}
 
 // Inizializzazione servizi
 let auth = null;
@@ -66,7 +71,5 @@ initFirebase();
 export { 
   auth, 
   db, 
-  googleProvider,
-  // Esporta altri servizi quando servono:
-  // storage, functions, analytics, etc.
+  googleProvider
 };
