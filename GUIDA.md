@@ -1,4 +1,3 @@
-Ecco la guida completa per avviare AI_RIQA in formato Markdown (`.md`), ottimizzata per il tuo progetto:
 
 ```markdown
 # Guida all'Installazione e Configurazione di AI_RIQA
