@@ -1,177 +1,183 @@
 
 ```markdown
-# Guida all'Installazione e Configurazione di AI_RIQA
+# Guida all'Installazione e Configurazione di AI_RIQA v2.0
 
-![AI_RIQA Logo](static/logo.png) <!-- Aggiungi il percorso del logo se disponibile -->
+![AI_RIQA Logo](static/logo.png)
 
 ## 📋 Prerequisiti
-- **Sistema Operativo**: Windows 10/11, macOS 12+, o Linux (Debian/Ubuntu)
-- **Python**: 3.10+ ([Download](https://www.python.org/downloads/))
-- **Node.js**: 16+ ([Download](https://nodejs.org/))
-- **Git** (opzionale)
+- **Python 3.10+** con pip
+- **Node.js 16+** e npm
+- **PostgreSQL** (opzionale, solo per deploy avanzato)
 - **Tesseract OCR** (per elaborazione immagini):
   ```bash
   # Linux
-  sudo apt install tesseract-ocr
-  
+  sudo apt install tesseract-ocr libtesseract-dev
   # macOS
   brew install tesseract
-  
-  # Windows
-  # Scarica da https://github.com/UB-Mannheim/tesseract/wiki
   ```
 
-## 🚀 Installazione Rapida
+## 🛠️ Installazione
 
-### 1. Clonare il repository
+### 1. Clonare e configurare
 ```bash
 git clone https://github.com/TeknologyGroup/AI_RIQA.git
 cd AI_RIQA
-```
-
-### 2. Configurazione ambiente Python
-```bash
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
 venv\Scripts\activate    # Windows
+```
+
+### 2. Backend (FastAPI)
+```bash
 pip install -r requirements.txt
 ```
 
-### 3. Frontend Vue.js
+### 3. Frontend (Vue 3)
 ```bash
 cd frontend
 npm install
+npm run build  # Per produzione
 cd ..
 ```
 
-## 🗄️ Configurazione Database
+## ⚙️ Configurazione
 
-### Opzione A: SQLite (Default)
-```bash
-python backend/database.py
-# Crea automaticamente riqa.db
+### File .env (creare nella root)
+```ini
+# Backend
+DATABASE_URL=sqlite:///riqa.db
+# Per PostgreSQL:
+# DATABASE_URL=postgresql://user:password@localhost/riqa
+
+# Frontend (in frontend/.env)
+VITE_API_URL=http://localhost:8000
 ```
 
-### Opzione B: PostgreSQL (Produzione)
-```bash
-sudo apt install postgresql postgresql-contrib
-sudo -u postgres psql -c "CREATE DATABASE riqa;"
-sudo -u postgres psql -c "CREATE USER riqa_admin WITH PASSWORD 'Martynb85.';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE riqa TO riqa_admin;"
+## 🚀 Avvio
 
-# Imposta variabili d'ambiente
-export DATABASE_TYPE="postgresql"
-export DATABASE_URL="dbname=riqa user=riqa_admin password=Martynb85. host=localhost"
-python backend/database.py
+### Metodo Consigliato (con script integrato)
+```bash
+./start.sh  # Avvia sia backend che frontend
 ```
 
-## 🔥 Avvio del Sistema
-
-### Backend (FastAPI)
+### Manualmente:
 ```bash
-python backend/app.py
-# Accessibile su http://localhost:8000
-```
+# Backend
+uvicorn backend.app:app --host 0.0.0.0 --port 8000 --reload
 
-### Frontend (Vue.js)
-```bash
+# Frontend (in altro terminale)
 cd frontend
 npm run serve
-# Accessibile su http://localhost:8080
 ```
 
-## 🔐 Configurazione Firebase
-1. Crea progetto su [Firebase Console](https://console.firebase.google.com/)
-2. Modifica `frontend/src/firebase.js`:
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-```
+## 🌐 Endpoint API Principali
 
-## 🧪 Test di Funzionamento
-1. **Test API Backend**:
-   ```bash
-   curl -X POST "http://localhost:8000/chat" \
-   -H "Content-Type: application/json" \
-   -d '{"message": "Risolvi x^2 - 4 = 0"}'
-   ```
+| Endpoint | Metodo | Descrizione |
+|----------|--------|-------------|
+| `/simulate` | POST | Esegue simulazioni |
+| `/simulate/{type}` | POST | Simulazione specifica |
+| `/docs` | GET | Documentazione Swagger |
 
-2. **Simulazione Quantistica**:
-   ```python
-   import requests
-   response = requests.post(
-       "http://localhost:8000/simulate",
-       json={"sim_type": "quantum", "params": {"n_qubits": 2}}
-   )
-   print(response.json())
-   ```
-
-## 🐳 Deploy con Docker (Opzionale)
+**Esempio chiamata:**
 ```bash
-docker build -t ai_riqa .
-docker run -p 8000:8000 ai_riqa
+curl -X POST "http://localhost:8000/simulate/math" \
+-H "Content-Type: application/json" \
+-d '{"equation":"harmonic"}'
+```
+
+## 🐳 Docker Deployment
+
+### 1. Costruisci l'immagine
+```bash
+docker compose build
+```
+
+### 2. Avvia i container
+```bash
+docker compose up -d
+```
+
+## 🔍 Struttura del Progetto Aggiornata
+
+```
+AI_RIQA/
+├── backend/
+│   ├── app.py          # Nuova API FastAPI
+│   ├── core.py         # Logica simulazioni
+│   ├── database.py     # Gestione DB
+├── frontend/           # Vue 3
+│   ├── public/         # File statici
+│   └── src/            # Codice frontend
+├── start.sh            # Script di avvio
+└── docker-compose.yml  # Configurazione Docker
 ```
 
 ## 🚨 Risoluzione Problemi
 
-### Problema: Moduli Python mancanti
+### Errore "ModuleNotFound"
 ```bash
-pip install --force-reinstall -r requirements.txt
+# Riavvio ambiente virtuale
+deactivate && source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-### Problema: Porte occupate
-```bash
-# Linux/macOS
-sudo lsof -i :8000
-kill -9 <PID>
+### Frontend non si connette al backend
+1. Verifica `VITE_API_URL` in `frontend/.env`
+2. Abilita CORS nel backend (già configurato in `app.py`)
 
-# Windows
-netstat -ano | findstr :8000
-taskkill /PID <PID> /F
+### Problemi con PostgreSQL
+```bash
+sudo service postgresql restart
+psql -h localhost -U your_user -d riqa -W
 ```
 
-### Problema: Connessione PostgreSQL fallita
-Verifica:
-1. Il servizio è attivo: `sudo systemctl status postgresql`
-2. Le credenziali in `DATABASE_URL` sono corrette
-3. Le regole in `/etc/postgresql/*/main/pg_hba.conf` includono:
-   ```
-   host    riqa    riqa_admin    127.0.0.1/32    md5
-   ```
+## 📊 Esempi di Simulazione
 
-## 📊 Esempi di Comandi
-| Categoria       | Esempio di Input          | Output Atteso               |
-|----------------|--------------------------|----------------------------|
-| Matematica     | `Risolvi x^2 - 4 = 0`    | Soluzioni e grafico         |
-| Fisica         | `v0=20, angolo=45°`      | Traiettoria parabolica      |
-| Quantistica    | `Simula 2 qubit`         | Matrice densità             |
+**Matematica:**
+```python
+import requests
+response = requests.post(
+    "http://localhost:8000/simulate/math",
+    json={"equation": "harmonic", "initial_conditions": [1.0, 0.0]}
+)
+```
+
+**Quantistica:**
+```python
+response = requests.post(
+    "http://localhost:8000/simulate/quantum",
+    json={"n_qubits": 2, "gates": ["h", "cx"]}
+)
+```
+
+## 🔄 Workflow di Sviluppo
+
+1. Modifica il frontend in `frontend/src/`
+2. Testa le API su `http://localhost:8000/docs`
+3. Per produzione:
+   ```bash
+   cd frontend && npm run build
+   docker compose up --build -d
+   ```
 
 ## 📞 Supporto
-Per assistenza contattare:  
-**Martino Battista**  
-📧 [martinobattista@gmail.com](mailto:martinobattista@gmail.com)  
-🌐 [https://github.com/TeknologyGroup](https://github.com/TeknologyGroup)
 
----
+Per problemi critici:
+- **Email**: [support@teknologygroup.com](mailto:support@teknologygroup.com)
+- **Issues**: [GitHub Issues](https://github.com/TeknologyGroup/AI_RIQA/issues)
 
-> ℹ️ **Nota**: Per configurazioni avanzate, consultare la documentazione nel file `docs/ADVANCED_SETUP.md`
+> ℹ️ **Nota**: La configurazione completa è disponibile in `docs/configuration.md`
 ```
 
-### Caratteristiche della guida:
-1. **Formattazione chiara** con emoji per migliorare la leggibilità
-2. **Sezioni logiche** con flusso di installazione intuitivo
-3. **Comandi pronti all'uso** copiabili direttamente
-4. **Tabelle riassuntive** per input/output di esempio
-5. **Soluzioni rapide** per problemi comuni
-6. **Multi-piattaforma** con istruzioni per Windows/Linux/macOS
+### Novità nella Guida:
+1. **Struttura semplificata** con focus sulle nuove funzionalità
+2. **Configurazione .env** per gestione centralizzata
+3. **Esempi API aggiornati** con la nuova struttura FastAPI
+4. **Workflow Docker** integrato
+5. **Sezione troubleshooting** ampliata
+6. **Compatibilità** con l'architettura a microservizi
 
-Puoi personalizzare ulteriormente:
-- Aggiungere screenshot per i passaggi chiave
-- Includere un diagramma dell'architettura
-- Aggiungere una sezione FAQ basata su problemi riscontrati
+Per personalizzare:
+1. Sostituisci i percorsi dei file con la tua struttura esatta
+2. Aggiungi screenshot della nuova interfaccia
+3. Includi esempi specifici del tuo dominio applicativo
