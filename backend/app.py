@@ -1,142 +1,92 @@
 """
-Backend FastAPI per AI_RIQA Chatbot Interface con supporto per interfaccia grafica e connessioni remote.
+Backend FastAPI per AI_RIQA
+Integrazione del core di simulazione con API REST
 """
 
-from fastapi import FastAPI, WebSocket, UploadFile, File
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from core import RIQACore
-from backend.database import save_simulation, get_connection
-import matplotlib.pyplot as plt
-import pytesseract
-from PIL import Image
-import asyncio
+from pathlib import Path
 import os
+from typing import Dict, Any
+from pydantic import BaseModel
 
-app = FastAPI(title="AI_RIQA Chatbot Server")
+# Importa il core dalla stessa directory
+from .core import RIQACore
+
+app = FastAPI(
+    title="AI_RIQA API",
+    description="API per simulazioni avanzate",
+    version="1.0.0"
+)
+
+# Configura CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Inizializza il core
 core = RIQACore()
 
-# Monta i file statici per il frontend
-app.mount("/static", StaticFiles(directory="../frontend/public"), name="static")
+# Modello Pydantic per la richiesta di simulazione
+class SimulationRequest(BaseModel):
+    sim_type: str
+    params: Dict[str, Any]
 
-# Endpoint Chat per l'interfaccia
-@app.post("/chat")
-async def chat(message: str, client_id: str = "anonymous"):
-    """
-    Gestisce i messaggi della chat e avvia simulazioni basate sul contenuto.
-    """
-    sim_type = (
-        "math" if "x" in message.lower() else
-        "quantum" if "qubit" in message.lower() else
-        "ballistic" if "v0" in message.lower() else
-        "biological" if "tasso" in message.lower() else
-        "astral"
-    )
-    params = (
-        {"equation": message} if sim_type == "math" else
-        {"initial_velocity": [20, 20]} if sim_type == "ballistic" else
-        {"n_qubits": 2} if sim_type == "quantum" else
-        {"rate": 0.1} if sim_type == "biological" else
-        {"radius": 1.0}
-    )
-    result = core.run_simulation(sim_type, params)
-    save_simulation(sim_type, params, result)
-    return {"result": result, "client_id": client_id}
+# Endpoint principale
+@app.get("/")
+async def root():
+    return {
+        "message": "Benvenuto in AI_RIQA",
+        "version": core.version,
+        "supported_simulations": core.supported_simulations
+    }
 
-# Endpoint per caricamento file
-@app.post("/upload")
-async def upload_file(file: UploadFile = File(...), client_id: str = "anonymous"):
-    """
-    Carica file (immagini o PDF) ed elabora il contenuto per la chat.
-    """
-    content = await file.read()
-    if file.filename.endswith(('.jpg', '.png')):
-        img = Image.open(file.file)
-        text = pytesseract.image_to_string(img)
-        return await chat(text, client_id)
-    return {"filename": file.filename, "result": "Formato non supportato"}
-
-# Endpoint per generare grafici
-@app.get("/graph/{sim_type}")
-async def get_graph(sim_type: str):
-    """
-    Genera un grafico PNG basato sui risultati della simulazione.
-    """
-    result = core.run_simulation(sim_type, {})
-    plt.plot(
-        result.get("time", range(len(result))),
-        result.get("position", list(result.values())[0]),
-        color="#4299E1"
-    )
-    plt.savefig("graph.png")
-    return FileResponse("graph.png")
-
-# WebSocket per chat in tempo reale
-@app.websocket("/ws/chat")
-async def websocket_chat(websocket: WebSocket):
-    """
-    Stream dei risultati della chat in tempo reale.
-    """
-    await websocket.accept()
-    data = await websocket.receive_json()
-    sim_type = data.get("type", "math")
-    params = data.get("params", {})
-    client_id = data.get("client_id", "anonymous")
-    result = core.run_simulation(sim_type, params)
-    
-    if isinstance(result, dict):
-        for key, values in result.items():
-            for i, value in enumerate(values):
-                await websocket.send_json({"step": i, "key": key, "value": value, "client_id": client_id})
-                await asyncio.sleep(0.1)
-    else:
-        await websocket.send_json({"result": result, "client_id": client_id})
-    await websocket.close()
-
-# Endpoint per simulazioni (remote o locali)
+# Endpoint per le simulazioni
 @app.post("/simulate")
-async def run_simulation(sim_type: str, params: dict, client_id: str = "anonymous"):
-    """
-    Esegue una simulazione remota o locale e salva i risultati nel database.
-    """
-    result = core.run_simulation(sim_type, params)
-    save_simulation(sim_type, params, result)
-    return {"result": result, "client_id": client_id}
+async def simulate(request: SimulationRequest):
+    try:
+        result = core.run_simulation(request.sim_type, request.params)
+        return {
+            "status": "success",
+            "simulation_type": request.sim_type,
+            "result": result
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Errore interno: {str(e)}")
 
-# WebSocket per simulazioni in streaming (unificato)
-@app.websocket("/ws/simulation")
-async def websocket_simulation(websocket: WebSocket):
-    """
-    Stream dei risultati delle simulazioni (chat o remote) in tempo reale.
-    """
-    await websocket.accept()
-    data = await websocket.receive_json()
-    sim_type = data.get("type", "math")
-    params = data.get("params", {})
-    client_id = data.get("client_id", "anonymous")
-    result = core.run_simulation(sim_type, params)
-    
-    if isinstance(result, dict):
-        for key, values in result.items():
-            for i, value in enumerate(values):
-                await websocket.send_json({"step": i, "key": key, "value": value, "client_id": client_id})
-                await asyncio.sleep(0.1)
-    else:
-        await websocket.send_json({"result": result, "client_id": client_id})
-    await websocket.close()
+# Endpoint specifici per ogni tipo di simulazione
+@app.post("/simulate/math")
+async def simulate_math(params: Dict[str, Any]):
+    return await simulate(SimulationRequest(sim_type="math", params=params))
 
-# Endpoint per risultati condivisi
-@app.get("/shared_results")
-async def get_shared_results():
-    """
-    Restituisce i risultati condivisi dagli utenti dal database.
-    """
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT type, parameters, result FROM experiments")
-    results = cur.fetchall()
-    conn.close()
-    return [{"type": r[0], "params": r[1], "result": r[2]} for r in results]
+@app.post("/simulate/ballistic")
+async def simulate_ballistic(params: Dict[str, Any]):
+    return await simulate(SimulationRequest(sim_type="ballistic", params=params))
+
+@app.post("/simulate/quantum")
+async def simulate_quantum(params: Dict[str, Any]):
+    return await simulate(SimulationRequest(sim_type="quantum", params=params))
+
+@app.post("/simulate/biological")
+async def simulate_biological(params: Dict[str, Any]):
+    return await simulate(SimulationRequest(sim_type="biological", params=params))
+
+@app.post("/simulate/astral")
+async def simulate_astral(params: Dict[str, Any]):
+    return await simulate(SimulationRequest(sim_type="astral", params=params))
+
+# Configurazione file statici (solo se necessario)
+static_dir = Path(__file__).parent.parent / "frontend" / "dist"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn
