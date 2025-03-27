@@ -1,383 +1,178 @@
-Ecco una guida dettagliata per avviare correttamente e rendere funzionale il chatbot AI_RIQA, basata sulla struttura del progetto. 
+Ecco la guida completa per avviare AI_RIQA in formato Markdown (`.md`), ottimizzata per il tuo progetto:
 
-La guida copre l’installazione delle dipendenze, la configurazione del database, l’avvio del server backend, l’accesso all’interfaccia grafica e i test di base per verificare che tutto funzioni. 
+```markdown
+# Guida all'Installazione e Configurazione di AI_RIQA
 
-È pensata per utenti con conoscenze tecniche di base, ma include anche dettagli per configurazioni avanzate.
+![AI_RIQA Logo](static/logo.png) <!-- Aggiungi il percorso del logo se disponibile -->
 
-Guida per Avviare il Chatbot AI_RIQA
-Benvenuto nella guida per avviare AI_RIQA, un chatbot avanzato con interfaccia grafica e supporto per simulazioni matematiche, fisiche, quantistiche, biologiche e astrali. 
-
-
-Segui i passaggi qui sotto per installarlo e avviarlo correttamente sul tuo sistema.
-
-Prerequisiti
-
- •	Sistema Operativo: Windows, macOS o Linux.
-
- •	Python: Versione 3.10 o superiore installata (scaricabile da python.org).
-
- •	Git: Per clonare il repository (opzionale, scaricabile da git-scm.com).
-
- •	Node.js e npm: Per il frontend Vue.js (scaricabili da nodejs.org).
-
- •	Browser: Chrome, Firefox o Edge per accedere all’interfaccia grafica.
-
-
-Passo 1: Clonare o Scaricare il Progetto
-	
- 1	Clona il Repository: git clone https://github.com/TeknologyGroup/AI_RIQA.git
-	
- 
- 2	cd AI_RIQA
-	
-
-
-Passo 2: Installare le Dipendenze
-
-
-Il progetto richiede librerie Python per il backend e Node.js per il frontend.
-
-        ◦	Backend (Python):
-	
-        ◦	Crea un ambiente virtuale (opzionale ma consigliato): python -m venv venv
-	
-        ◦	source venv/bin/activate  # Linux/macOS
-	
-        ◦	venv\Scripts\activate     # Windows
-	
-        ◦	
-	
-
-◦	Installa le dipendenze: pip install -r requirements.txt
-
-◦	Contenuto di requirements.txt (assicurati che sia presente): 
-
-	
-        ◦	fastapi==0.115.0
-        ◦	uvicorn==0.30.6
-        ◦	numpy==1.26.4
-        ◦	scipy==1.13.0
-	◦	qiskit==0.46.0
-	◦	requests==2.31.0
-	◦	pytesseract==0.3.10
-	◦	pillow==10.4.0
-	◦	matplotlib==3.9.2
-	◦	psycopg2-binary==2.9.9
-
-
-
-
- 
- 
- 2	Frontend (Vue.js):
-
-
-	◦	Entra nella directory del frontend: cd frontend
- 
-	
-        ◦	Installa le dipendenze Node.js: npm install
-	
-        	
-	
-        ◦	Torna alla directory principale: cd ..
-	
-        	
-	
-        3	Tesseract OCR (per il caricamento di immagini):
-	
-        ◦	Linux: sudo apt install tesseract-ocr
-	
-        ◦	macOS: brew install tesseract
-	
-        ◦	Windows: Scarica e installa da qui, poi aggiungi il percorso a PATH.
-
- 
-
-Passo 3: Configurare il Database
-
-AI_RIQA supporta SQLite (default) o PostgreSQL. Scegli uno dei due.
-
-        
-	1	SQLite (Default):
-	
-        ◦	Non richiede configurazione aggiuntiva.
-	
-        ◦	Esegui: python backend/database.py
-		
-	◦	Verrà creato un file riqa.db nella directory principale.
-	
-        
-	
- 2	PostgreSQL (Opzionale):
-	
-        ◦	Installa PostgreSQL localmente o usa un servizio cloud (es. Heroku, AWS).
-	
-        ◦	Crea un database chiamato riqa.
-	
-        ◦	Imposta le variabili d’ambiente: export DATABASE_TYPE="postgresql"
-	
-        ◦	export DATABASE_URL="dbname=riqa user=postgres password=secret host=localhost"
-	
-        ◦	 Nota: Sostituisci secret e localhost con le tue credenziali reali.
-	
-        ◦	Inizializza il database: python backend/database.py
-	
-
-
-Utilizzo di SQLite (default)
-Come attivarlo:
-
-bash
-Copy
-unset DATABASE_TYPE
-unset DATABASE_URL
-Oppure assicurati che queste variabili d'ambiente non siano impostate.
-
-Comando per inizializzare:
-
-bash
-Copy
-python3 backend/database.py
-Output atteso: Database inizializzato con sqlite
-Verrà creato il file riqa.db nella cartella principale.
-
-Vantaggi:
-
-Zero configurazione
-
-File singolo auto-contenuto
-
-Ideale per sviluppo/test
-
-2. Utilizzo di PostgreSQL
-Come attivarlo:
-
-bash
-Copy
-export DATABASE_TYPE="postgresql"
-export DATABASE_URL="dbname=riqa user=tuo_user password=tua_password host=localhost"
-Comando per inizializzare (stesso script):
-
-bash
-Copy
-python3 backend/database.py
-Output atteso: Database inizializzato con postgresql
-
-Verifica connessione:
-
-bash
-Copy
-psql -h localhost -U tuo_user -d riqa -c "\dt"
-Vantaggi:
-
-Più performante per carichi elevati
-
-Accesso multi-utente
-
-Funzionalità avanzate
-
-Esempio pratico di switch:
-bash
-Copy
-# Passa a PostgreSQL
-export DATABASE_TYPE="postgresql"
-export DATABASE_URL="dbname=riqa user=postgres password=secret host=localhost"
-python3 backend/database.py
-
-# Torna a SQLite
-unset DATABASE_TYPE DATABASE_URL
-python3 backend/database.py
-Differenze chiave:
-Feature	SQLite	PostgreSQL
-File	riqa.db	N/A (server)
-Connessioni	Singola	Multiple
-Configurazione	Nessuna	Richiede setup
-Dependencies	Built-in in Python	psycopg2 + server
-Consigli:
-Per sviluppo locale: usa SQLite (più semplice)
-
-Per produzione: PostgreSQL (più robusto)
-
-Puoi mantenere entrambe le configurazioni e alternare quando serve
-
-
-
+## 📋 Prerequisiti
+- **Sistema Operativo**: Windows 10/11, macOS 12+, o Linux (Debian/Ubuntu)
+- **Python**: 3.10+ ([Download](https://www.python.org/downloads/))
+- **Node.js**: 16+ ([Download](https://nodejs.org/))
+- **Git** (opzionale)
+- **Tesseract OCR** (per elaborazione immagini):
+  ```bash
+  # Linux
+  sudo apt install tesseract-ocr
   
+  # macOS
+  brew install tesseract
+  
+  # Windows
+  # Scarica da https://github.com/UB-Mannheim/tesseract/wiki
+  ```
 
-Passo 4: Configurare Firebase (Login con Google)
+## 🚀 Installazione Rapida
 
-        1	Crea un Progetto Firebase:
-	
-        ◦	Vai su Firebase Console, crea un nuovo progetto.
-	
-        ◦	Abilita l’autenticazione e configura il provider “Google”.
-	
+### 1. Clonare il repository
+```bash
+git clone https://github.com/TeknologyGroup/AI_RIQA.git
+cd AI_RIQA
+```
 
-	
-        2	Aggiorna firebase.js:
-	
-        ◦	Trova le credenziali nella sezione “Configurazione Web” del tuo progetto Firebase.
-	
-        ◦	Modifica AI_RIQA/frontend/src/firebase.js: 
-	
-                  const firebaseConfig = {
-		  apiKey: "YOUR_API_KEY",
-		  authDomain: "YOUR_AUTH_DOMAIN",
-		  projectId: "YOUR_PROJECT_ID",
-		  storageBucket: "YOUR_STORAGE_BUCKET",
-		  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-		  appId: "YOUR_APP_ID"
-		};
-	
-        
-		firebase.initializeApp(firebaseConfig);
-	
-        	export const auth = firebase.auth();
-		export const googleProvider = new firebase.auth.GoogleAuthProvider();
-	
+### 2. Configurazione ambiente Python
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate    # Windows
+pip install -r requirements.txt
+```
 
-	 
-	
-3	Aggiungi Firebase al Frontend:
-	
-        ◦	Assicurati che index.html includa gli script Firebase (già presenti nel codice fornito).
+### 3. Frontend Vue.js
+```bash
+cd frontend
+npm install
+cd ..
+```
 
+## 🗄️ Configurazione Database
 
-Passo 5: Avviare il Server Backend
+### Opzione A: SQLite (Default)
+```bash
+python backend/database.py
+# Crea automaticamente riqa.db
+```
 
-        1	Esegui il Server: python backend/app.py
-	
-        2	Il server sarà disponibile su http://localhost:8000.
-	
-        3	Verifica:
-	
-        ◦	Apri un browser e vai su http://localhost:8000/docs per vedere la documentazione API Swagger.
-	
-        ◦	Testa un endpoint, ad esempio: curl -X POST "http://localhost:8000/chat" -H "Content-Type: application/json" -d '{"message": "x^2"}'
+### Opzione B: PostgreSQL (Produzione)
+```bash
+sudo apt install postgresql postgresql-contrib
+sudo -u postgres psql -c "CREATE DATABASE riqa;"
+sudo -u postgres psql -c "CREATE USER riqa_admin WITH PASSWORD 'Martynb85.';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE riqa TO riqa_admin;"
 
-        
+# Imposta variabili d'ambiente
+export DATABASE_TYPE="postgresql"
+export DATABASE_URL="dbname=riqa user=riqa_admin password=Martynb85. host=localhost"
+python backend/database.py
+```
 
+## 🔥 Avvio del Sistema
 
-Passo 6: Avviare l’Interfaccia Grafica
+### Backend (FastAPI)
+```bash
+python backend/app.py
+# Accessibile su http://localhost:8000
+```
 
-       1	Esegui il Frontend:
-	
-       ◦	Torna nella directory frontend: cd frontend
+### Frontend (Vue.js)
+```bash
+cd frontend
+npm run serve
+# Accessibile su http://localhost:8080
+```
 
-       ◦	Avvia il server di sviluppo Vue.js: npm run serve
-	
-       ◦	Il frontend sarà disponibile su http://localhost:8080 (o una porta simile indicata nel terminale).
+## 🔐 Configurazione Firebase
+1. Crea progetto su [Firebase Console](https://console.firebase.google.com/)
+2. Modifica `frontend/src/firebase.js`:
+```javascript
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+```
 
-       
-       
-       2	Accesso Statico (Alternativa)**:
-	
-       ◦	Se non vuoi usare npm run serve, il backend serve già i file statici. Vai direttamente a: http://localhost:8000/static/index.html
-		
+## 🧪 Test di Funzionamento
+1. **Test API Backend**:
+   ```bash
+   curl -X POST "http://localhost:8000/chat" \
+   -H "Content-Type: application/json" \
+   -d '{"message": "Risolvi x^2 - 4 = 0"}'
+   ```
 
+2. **Simulazione Quantistica**:
+   ```python
+   import requests
+   response = requests.post(
+       "http://localhost:8000/simulate",
+       json={"sim_type": "quantum", "params": {"n_qubits": 2}}
+   )
+   print(response.json())
+   ```
 
+## 🐳 Deploy con Docker (Opzionale)
+```bash
+docker build -t ai_riqa .
+docker run -p 8000:8000 ai_riqa
+```
 
-Passo 7: Testare il Chatbot
+## 🚨 Risoluzione Problemi
 
-        1	Login:
-	
-        ◦	Clicca su “Login” nell’interfaccia e accedi con il tuo account Google.
-	
-        2	Inviare un Messaggio:
-	
-        ◦	Digita “Risolvi x^2 - 4 = 0” nel campo di input e premi “Invia”.
-	
-        ◦	Risultato atteso: una risposta con i risultati matematici.
-	
-        3	Caricare un File:
-	
-        ◦	Usa il pulsante di caricamento per inviare un’immagine con un’equazione (es. JPG/PNG).
-	
-        ◦	Il chatbot estrarrà il testo con OCR e risponderà.
-	
-        4	Visualizzare un Grafico:
-	
-        ◦	Vai a http://localhost:8000/graph/math per scaricare un grafico PNG.
-	
-        5	Simulazione Remota:
-	
-        ◦	Modifica client.py per testare: import requests
-	
-        ◦	result = requests.post("http://localhost:8000/simulate", json={"sim_type": "quantum", "params": {"n_qubits": 2}}).json()
-	
-        ◦	print(result)
-	
-   	
+### Problema: Moduli Python mancanti
+```bash
+pip install --force-reinstall -r requirements.txt
+```
 
+### Problema: Porte occupate
+```bash
+# Linux/macOS
+sudo lsof -i :8000
+kill -9 <PID>
 
-6	Risultati Condivisi:
+# Windows
+netstat -ano | findstr :8000
+taskkill /PID <PID> /F
+```
 
-        ◦	Vai a http://localhost:8000/shared_results per vedere i dati salvati nel database.
+### Problema: Connessione PostgreSQL fallita
+Verifica:
+1. Il servizio è attivo: `sudo systemctl status postgresql`
+2. Le credenziali in `DATABASE_URL` sono corrette
+3. Le regole in `/etc/postgresql/*/main/pg_hba.conf` includono:
+   ```
+   host    riqa    riqa_admin    127.0.0.1/32    md5
+   ```
 
+## 📊 Esempi di Comandi
+| Categoria       | Esempio di Input          | Output Atteso               |
+|----------------|--------------------------|----------------------------|
+| Matematica     | `Risolvi x^2 - 4 = 0`    | Soluzioni e grafico         |
+| Fisica         | `v0=20, angolo=45°`      | Traiettoria parabolica      |
+| Quantistica    | `Simula 2 qubit`         | Matrice densità             |
 
+## 📞 Supporto
+Per assistenza contattare:  
+**Martino Battista**  
+📧 [martinobattista@gmail.com](mailto:martinobattista@gmail.com)  
+🌐 [https://github.com/TeknologyGroup](https://github.com/TeknologyGroup)
 
+---
 
-Passo 8: Configurazioni Avanzate (Opzionale)
+> ℹ️ **Nota**: Per configurazioni avanzate, consultare la documentazione nel file `docs/ADVANCED_SETUP.md`
+```
 
-        1	Deploy su Server Remoto:
-	
-        ◦	Usa Docker: docker build -t ai_riqa .
-	
-        ◦	docker run -p 8000:8000 ai_riqa
-	
- 	◦	Oppure carica su un VPS (es. DigitalOcean) e configura un IP pubblico.
+### Caratteristiche della guida:
+1. **Formattazione chiara** con emoji per migliorare la leggibilità
+2. **Sezioni logiche** con flusso di installazione intuitivo
+3. **Comandi pronti all'uso** copiabili direttamente
+4. **Tabelle riassuntive** per input/output di esempio
+5. **Soluzioni rapide** per problemi comuni
+6. **Multi-piattaforma** con istruzioni per Windows/Linux/macOS
 
-      
-       2	Google Drive:
-	
-       ◦	Aggiungi l’integrazione con Google Drive API per salvare i risultati (richiede ulteriori configurazioni).
-	
- 
-       3	Personalizzazione:
-	
-       ◦	Modifica i colori in frontend/src/assets/style.css o aggiungi nuove simulazioni in core.py.
-
-
-
-
-Risoluzione dei Problemi
-
-        •	Errore “Modulo non trovato”:
-	
-        ◦	Verifica che tutte le dipendenze siano installate (pip install -r requirements.txt).
-	
- 
-        •	Server non si avvia:
-	
-        ◦	Controlla che la porta 8000 non sia occupata (lsof -i :8000 su Linux/macOS).
-	
- 
-        •	Frontend non carica:
-	
-        ◦	Assicurati che npm run serve sia attivo o che i file in frontend/public siano corretti.
-	
- 
-        •	Database non funziona:
-	
-        ◦	Controlla le variabili d’ambiente per PostgreSQL o il percorso di riqa.db per SQLite.
-
-
-
-
-Esempi di Utilizzo
-
-        •	Matematica: “Risolvi x^2 - 4 = 0” → Risultati: soluzioni e grafico.
-	
-        •	Balistica: “v0=20, angolo=45°” → Traiettoria e dati.
-	
-        •	Quantistica: “Simula 2 qubit” → Probabilità di misurazione.
-	
-        •	Biologica: “Tasso 0.1” → Curva di crescita.
-	
-        •	Astrale: “Raggio 1 AU” → Orbita circolare.
-
-
-
-Congratulazioni! Hai avviato con successo AI_RIQA. 
-Per supporto o personalizzazioni, consulta il codice sorgente o contatta lo sviluppatore.Martino Battista martinobattista@gmail.com
-
+Puoi personalizzare ulteriormente:
+- Aggiungere screenshot per i passaggi chiave
+- Includere un diagramma dell'architettura
+- Aggiungere una sezione FAQ basata su problemi riscontrati
