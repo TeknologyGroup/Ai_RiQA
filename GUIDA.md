@@ -122,7 +122,87 @@ AI_RIQA supporta SQLite (default) o PostgreSQL. Scegli uno dei due.
 	
         ◦	Inizializza il database: python backend/database.py
 	
-        	
+
+
+Utilizzo di SQLite (default)
+Come attivarlo:
+
+bash
+Copy
+unset DATABASE_TYPE
+unset DATABASE_URL
+Oppure assicurati che queste variabili d'ambiente non siano impostate.
+
+Comando per inizializzare:
+
+bash
+Copy
+python3 backend/database.py
+Output atteso: Database inizializzato con sqlite
+Verrà creato il file riqa.db nella cartella principale.
+
+Vantaggi:
+
+Zero configurazione
+
+File singolo auto-contenuto
+
+Ideale per sviluppo/test
+
+2. Utilizzo di PostgreSQL
+Come attivarlo:
+
+bash
+Copy
+export DATABASE_TYPE="postgresql"
+export DATABASE_URL="dbname=riqa user=tuo_user password=tua_password host=localhost"
+Comando per inizializzare (stesso script):
+
+bash
+Copy
+python3 backend/database.py
+Output atteso: Database inizializzato con postgresql
+
+Verifica connessione:
+
+bash
+Copy
+psql -h localhost -U tuo_user -d riqa -c "\dt"
+Vantaggi:
+
+Più performante per carichi elevati
+
+Accesso multi-utente
+
+Funzionalità avanzate
+
+Esempio pratico di switch:
+bash
+Copy
+# Passa a PostgreSQL
+export DATABASE_TYPE="postgresql"
+export DATABASE_URL="dbname=riqa user=postgres password=secret host=localhost"
+python3 backend/database.py
+
+# Torna a SQLite
+unset DATABASE_TYPE DATABASE_URL
+python3 backend/database.py
+Differenze chiave:
+Feature	SQLite	PostgreSQL
+File	riqa.db	N/A (server)
+Connessioni	Singola	Multiple
+Configurazione	Nessuna	Richiede setup
+Dependencies	Built-in in Python	psycopg2 + server
+Consigli:
+Per sviluppo locale: usa SQLite (più semplice)
+
+Per produzione: PostgreSQL (più robusto)
+
+Puoi mantenere entrambe le configurazioni e alternare quando serve
+
+
+
+  
 
 Passo 4: Configurare Firebase (Login con Google)
 
