@@ -26,6 +26,7 @@ def simulate_complex_system(params: SimulationParameters):
         params.initial_conditions,
         method='RK45',
         t_eval=np.linspace(*params.time_range, 100)
+    )  # Aggiunto parentesi mancante qui
     
     return {
         'time': sol.t.tolist(),
