@@ -7,6 +7,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend  # <-- Aggiungi questa linea globale
+
     steps:
     - uses: actions/checkout@v4
     
@@ -17,13 +21,9 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      working-directory: ./frontend
-      run: |
-        npm ci
-        npm install
-        
+      run: npm ci  # <-- Ora cerca il lock file in ./frontend
+      
     - name: Build
-      working-directory: ./frontend
       run: npm run build
       
     - name: Deploy to Firebase
