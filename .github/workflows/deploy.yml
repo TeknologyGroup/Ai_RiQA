@@ -21,16 +21,20 @@ jobs:
         cache: 'npm'
 
     - name: Install Dependencies
+      working-directory: ./frontend
       run: |
-        cd frontend
-        npm ci
+        npm install
+        npm ci --omit=dev
       env:
         CI: true
 
+    - name: Generate Lock File
+      working-directory: ./frontend
+      run: npm install --package-lock-only
+
     - name: Build Frontend
-      run: |
-        cd frontend
-        npm run build
+      working-directory: ./frontend
+      run: npm run build
 
     - name: Deploy to Firebase
       uses: FirebaseExtended/action-hosting-deploy@v0
