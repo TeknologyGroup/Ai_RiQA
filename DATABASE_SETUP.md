@@ -1,4 +1,3 @@
-Ecco il contenuto per il tuo file `DATABASE_SETUP.md` che puoi includere nel progetto:
 
 ```markdown
 # Configurazione del Database AI_RIQA
