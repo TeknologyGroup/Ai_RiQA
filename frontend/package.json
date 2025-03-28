@@ -1,8 +1,12 @@
 {
+  "name": "frontend",
+  "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "predeploy": "npm run build",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -12,6 +16,9 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.8"
+    "@vue/cli-service": "~5.0.8",
+    "@vue/compiler-sfc": "^3.2.13",
+    "sass": "^1.32.0",
+    "sass-loader": "^12.0.0"
   }
 }
