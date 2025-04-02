@@ -1,33 +1,18 @@
 [build]
-base = "/"
-publish = "dist"
-command = "npm run build"
-
-[context.production]
-environment = { NODE_ENV = "production" }
-
-[context.preview]
-environment = { NODE_ENV = "preview" }
-
-[[redirects]]
-from = "/old"
-to = "/new"
-status = 301
-
-[[headers]]
-for = "/*"
-[headers.values]
-X-XSS-Protection = "1; mode=block"
-
-[build]
+  base = "/"
+  publish = "frontend/dist"
   command = """
     apt-get update
     apt-get install -y gfortran
     pip install -r requirements.txt
   """
-  publish = "dist"
 
-  [build]
-  command = "docker build -t my-app . && docker run my-app"
-  publish = "dist"
+[context.production]
+  environment = { NODE_ENV = "production" }
 
+[context.deploy-preview]
+  environment = { NODE_ENV = "deploy-preview" }
+
+[dev]
+  command = "npm run serve"
+  port = 3000
