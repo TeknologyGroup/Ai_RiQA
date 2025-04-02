@@ -2,14 +2,12 @@
   base = "/"
   publish = "frontend/dist"
   command = """
-    apt-get update
-    apt-get install -y gfortran
+    sudo apt-get update
+    sudo apt-get install -y --no-install-recommends gfortran
+    sudo apt-get install -y libatlas-base-dev liblapack-dev
     pip install --upgrade pip
     pip install -r requirements.txt
   """
-
-[functions]
-  included_files = ["frontend/dist/**"]
 
 [context.production]
   environment = { NODE_ENV = "production" }
