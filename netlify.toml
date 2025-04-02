@@ -4,8 +4,12 @@
   command = """
     apt-get update
     apt-get install -y gfortran
+    pip install --upgrade pip
     pip install -r requirements.txt
   """
+
+[functions]
+  included_files = ["frontend/dist/**"]
 
 [context.production]
   environment = { NODE_ENV = "production" }
