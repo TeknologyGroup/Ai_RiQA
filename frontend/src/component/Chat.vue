@@ -1,40 +1,36 @@
 <template>
-  <div class="chat-container">
+  <div class="chat">
     <div v-for="(msg, index) in messages" :key="index" :class="msg.role">
       {{ msg.content }}
     </div>
-    <input v-model="input" @keyup.enter="send" placeholder="Scrivi o carica..." />
-    <button @click="send">Invia</button>
-    <button @click="record">Microfono</button>
-    <input type="file" @change="uploadFile" />
+    <input v-model="newMessage" @keyup.enter="send" placeholder="Type a message..." />
+    <button @click="send">Send</button>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['messages'],
+  props: {
+    messages: { type: Array, default: () => [] }
+  },
   data() {
-    return { input: '' };
+    return { newMessage: '' };
   },
   methods: {
     send() {
-      if (this.input) {
-        this.$emit('send', this.input);
-        this.input = '';
+      if (this.newMessage.trim()) {
+        this.$emit('send', this.newMessage);
+        this.newMessage = '';
       }
-    },
-    record() {
-      // Implementare input vocale con Web Speech API
-      console.log('Registrazione vocale...');
-    },
-    async uploadFile(event) {
-      const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      const response = await fetch('/upload', { method: 'POST', body: formData });
-      const data = await response.json();
-      this.$emit('send', data.result);
     }
   }
 };
 </script>
+
+<style scoped>
+.chat { border: 1px solid #4299E1; padding: 10px; max-width: 600px; margin: 10px auto; }
+.user { color: #2C5282; text-align: right; }
+.ai { color: #4299E1; text-align: left; }
+input { width: 80%; padding: 5px; margin-right: 10px; }
+button { padding: 5px 10px; background-color: #4299E1; color: white; border: none; cursor: pointer; }
+</style>
