@@ -18,3 +18,11 @@ status = 301
 for = "/*"
 [headers.values]
 X-XSS-Protection = "1; mode=block"
+
+[build]
+  command = """
+    apt-get update
+    apt-get install -y gfortran
+    pip install -r requirements.txt
+  """
+  publish = "dist"
