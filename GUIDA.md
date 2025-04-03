@@ -1,314 +1,24 @@
 
-```markdown
-# Guida all'Installazione e Configurazione di AI_RIQA v2.0
+# AI_RIQA Advanced Implementation Guide
 
-AI_RIQA 
+## Table of Contents
+- [Production Deployment with Nginx](#-production-deployment-with-nginx)
+- [JWT Authentication System](#-jwt-authentication-system)
+- [Advanced Simulation Examples](#-advanced-simulation-examples)
+- [Security Configuration](#-security-configuration)
+- [CI/CD Pipeline](#-cicd-pipeline)
+- [Monitoring & Metrics](#-monitoring--metrics)
+- [Troubleshooting](#-troubleshooting)
 
-## 📋 Prerequisiti
-- **Python 3.10+** con pip
-- **Node.js 16+** e npm
-- **PostgreSQL** (opzionale, solo per deploy avanzato)
-- **Tesseract OCR** (per elaborazione immagini):
-  ```bash
-  # Linux
-  sudo apt install tesseract-ocr libtesseract-dev
-  # macOS
-  brew install tesseract
-  ```
+## 🌐 Production Deployment with Nginx
 
-## 🛠️ Installazione
-
-### 1. Clonare e configurare
+### 1. Install Nginx
 ```bash
-git clone https://github.com/TeknologyGroup/AI_RIQA.git
-cd AI_RIQA
-python -m venv venv
-source venv/bin/activate  # Linux/macOS
-venv\Scripts\activate    # Windows
-```
-
-### 2. Backend (FastAPI)
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Frontend (Vue 3)
-```bash
-cd frontend
-npm install
-npm run build  # Per produzione
-cd ..
-```
-
-## ⚙️ Configurazione
-
-### File .env (creare nella root)
-```ini
-# Backend
-DATABASE_URL=sqlite:///riqa.db
-# Per PostgreSQL:
-# DATABASE_URL=postgresql://user:password@localhost/riqa
-
-# Frontend (in frontend/.env)
-VITE_API_URL=http://localhost:8000
-```
-
-## 🚀 Avvio
-
-### Metodo Consigliato (con script integrato)
-```bash
-./start.sh  # Avvia sia backend che frontend
-```
-
-### Manualmente:
-```bash
-# Backend
-uvicorn backend.app:app --host 0.0.0.0 --port 8000 --reload
-
-# Frontend (in altro terminale)
-cd frontend
-npm run serve
-```
-
-## 🌐 Endpoint API Principali
-
-| Endpoint | Metodo | Descrizione |
-|----------|--------|-------------|
-| `/simulate` | POST | Esegue simulazioni |
-| `/simulate/{type}` | POST | Simulazione specifica |
-| `/docs` | GET | Documentazione Swagger |
-
-**Esempio chiamata:**
-```bash
-curl -X POST "http://localhost:8000/simulate/math" \
--H "Content-Type: application/json" \
--d '{"equation":"harmonic"}'
-```
-
-## 🐳 Docker Deployment
-
-### 1. Costruisci l'immagine
-```bash
-docker compose build
-```
-
-### 2. Avvia i container
-```bash
-docker compose up -d
-```
-
-## 🔍 Struttura del Progetto Aggiornata
-
-```
-AI_RIQA/
-├── backend/
-│   ├── app.py          # Nuova API FastAPI
-│   ├── core.py         # Logica simulazioni
-│   ├── database.py     # Gestione DB
-├── frontend/           # Vue 3
-│   ├── public/         # File statici
-│   └── src/            # Codice frontend
-├── start.sh            # Script di avvio
-└── docker-compose.yml  # Configurazione Docker
-```
-
-## 🚨 Risoluzione Problemi
-
-### Errore "ModuleNotFound"
-```bash
-# Riavvio ambiente virtuale
-deactivate && source venv/bin/activate
-pip install -r requirements.txt
-```
-
-### Frontend non si connette al backend
-1. Verifica `VITE_API_URL` in `frontend/.env`
-2. Abilita CORS nel backend (già configurato in `app.py`)
-
-### Problemi con PostgreSQL
-```bash
-sudo service postgresql restart
-psql -h localhost -U your_user -d riqa -W
-```
-
-## 📊 Esempi di Simulazione
-
-**Matematica:**
-```python
-import requests
-response = requests.post(
-    "http://localhost:8000/simulate/math",
-    json={"equation": "harmonic", "initial_conditions": [1.0, 0.0]}
-)
-```
-
-**Quantistica:**
-```python
-response = requests.post(
-    "http://localhost:8000/simulate/quantum",
-    json={"n_qubits": 2, "gates": ["h", "cx"]}
-)
-```
-
-## 🔄 Workflow di Sviluppo
-
-1. Modifica il frontend in `frontend/src/`
-2. Testa le API su `http://localhost:8000/docs`
-3. Per produzione:
-   ```bash
-   cd frontend && npm run build
-   docker compose up --build -d
-   ```
-
-## 📞 Supporto
-
-Per problemi critici:
-- **Email**: [support@teknologygroup.com](mailto:support@teknologygroup.com)
-- **Issues**: [GitHub Issues](https://github.com/TeknologyGroup/AI_RIQA/issues)
-
-> ℹ️ **Nota**: La configurazione completa è disponibile in `docs/configuration.md`
-```
-
-### Novità nella Guida:
-1. **Struttura semplificata** con focus sulle nuove funzionalità
-2. **Configurazione .env** per gestione centralizzata
-3. **Esempi API aggiornati** con la nuova struttura FastAPI
-4. **Workflow Docker** integrato
-5. **Sezione troubleshooting** ampliata
-6. **Compatibilità** con l'architettura a microservizi
-
-Per personalizzare:
-1. Sostituisci i percorsi dei file con la tua struttura esatta
-2. Aggiungi screenshot della nuova interfaccia
-3. Includi esempi specifici del tuo dominio applicativo
-
-
-Ecco la guida aggiornata con le correzioni basate sui tuoi test:
-
-```markdown
-# Guida Definitiva per AI_RIQA v2.1
-
-![AI_RIQA Logo](static/logo.png)
-
-## ✅ Verifica Finale
-
-Il tuo output mostra che:
-```bash
-# Backend funzionante
-curl -X POST "http://localhost:8000/simulate/math" -H "Content-Type: application/json" -d '{"equation":"harmonic"}'
-# Risposta corretta con dati di simulazione
-```
-
-## 🔧 Configurazione Completa
-
-### 1. File .env ottimizzato
-```ini
-# BACKEND
-DATABASE_URL=sqlite:///riqa.db
-DEBUG=true
-API_PORT=8000
-
-# FRONTEND (in frontend/.env)
-VITE_API_URL=http://localhost:8000
-```
-
-### 2. Script di Avvio Migliorato (`start.sh`)
-```bash
-#!/bin/bash
-
-# Attiva venv
-source venv/bin/activate
-
-# Avvia backend
-uvicorn backend.app:app --host 0.0.0.0 --port 8000 --reload &
-BACKEND_PID=$!
-
-# Avvia frontend
-cd frontend
-npm run serve &
-FRONTEND_PID=$!
-
-# Gestione CTRL+C
-trap "kill $BACKEND_PID $FRONTEND_PID" SIGINT
-wait
-```
-
-## 🐛 Problemi Risolti
-
-1. **Database SQLite**: Il file `riqa.db` viene creato automaticamente
-2. **Endpoint API**: Tutti gli endpoint rispondono correttamente
-3. **Frontend**: Si connette al backend su `http://localhost:8000`
-
-## 🚀 Comandi Rapidi
-
-| Scopo | Comando |
-|-------|---------|
-| Avvio completo | `./start.sh` |
-| Solo backend | `uvicorn backend.app:app --reload` |
-| Solo frontend | `cd frontend && npm run serve` |
-| Test API | `curl -X POST "http://localhost:8000/simulate/math" -H "Content-Type: application/json" -d '{"equation":"harmonic"}'` |
-
-## 📌 Note Importanti
-
-1. **Docker non installato**: Per risolvere:
-```bash
-sudo apt-get install docker.io docker-compose
-```
-
-2. **Struttura confermata**:
-```
-AI_RIQA/
-├── backend/
-│   ├── app.py (funzionante)
-│   ├── core.py
-│   └── riqa.db (creato)
-├── frontend/
-└── start.sh
-```
-
-3. **Prossimi passi**:
-- Configurare Nginx per produzione
-- Implementare autenticazione JWT
-- Aggiungere più esempi di simulazione
-
-## 🆘 Supporto Urgente
-
-Per problemi immediati:
-```bash
-# Resetta completamente l'ambiente
-./reset_environment.sh
-```
-
-Contatti:
-- Email: support@teknologygroup.com
-- Telegram: @AI_RIQA_support
-```
-
-### Cosa abbiamo sistemato:
-1. Confermato il corretto funzionamento degli endpoint API
-2. Aggiunto script di avvio migliorato
-3. Documentato la mancanza di Docker (con soluzione)
-4. Semplificato la guida per lo stato attuale del progetto
-5. Aggiunti contatti diretti per supporto
-
-La guida ora riflette esattamente lo stato del tuo progetto funzionante!
-
-
-
-Ecco la guida completa per implementare i prossimi passi avanzati in AI_RIQA:
-
-```markdown
-# Avanzato - AI_RIQA Production Ready
-
-## 🌐 Configurazione Nginx per Produzione
-
-### 1. Installazione Nginx
-```bash
-sudo apt install nginx
+sudo apt update && sudo apt install -y nginx
 sudo systemctl enable nginx
 ```
 
-### 2. Configurazione `/etc/nginx/sites-available/ai_riqa`
+### 2. Configure `/etc/nginx/sites-available/ai_riqa`
 ```nginx
 server {
     listen 80;
@@ -318,6 +28,7 @@ server {
         proxy_pass http://localhost:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         
         # WebSocket support
         proxy_http_version 1.1;
@@ -328,161 +39,247 @@ server {
     location /static/ {
         alias /path/to/AI_RIQA/frontend/dist/;
         expires 30d;
+        access_log off;
     }
 
-    # Abilita compressione
+    # Enable compression
     gzip on;
-    gzip_types text/plain application/json;
+    gzip_types text/plain text/css application/json application/javascript;
+    gzip_min_length 1024;
 }
 ```
 
-### 3. Abilita la configurazione
+### 3. Enable Configuration
 ```bash
-sudo ln -s /etc/nginx/sites-available/ai_riqa /etc/nginx/sites-enabled
-sudo nginx -t  # Verifica la configurazione
+sudo ln -s /etc/nginx/sites-available/ai_riqa /etc/nginx/sites-enabled/
+sudo nginx -t  # Test configuration
 sudo systemctl restart nginx
 ```
 
-## 🔐 Autenticazione JWT (Backend)
+## 🔐 JWT Authentication System
 
-### 1. Modifica `backend/auth.py`
+### Backend Implementation (`backend/auth.py`)
 ```python
 from datetime import datetime, timedelta
-from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from pydantic import BaseModel
 
-# Configurazione
-SECRET_KEY = "your-secret-key-here"
+# Configuration
+SECRET_KEY = "your-256-bit-secret"  # Generate: openssl rand -hex 32
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+class TokenData(BaseModel):
+    username: str | None = None
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-def create_access_token(data: dict):
+def verify_password(plain_password: str, hashed_password: str):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
-        status_code=401,
-        detail="Could not validate credentials"
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
+    return token_data
 ```
 
-### 2. Integra in `backend/app.py`
+### Integration with FastAPI (`backend/app.py`)
 ```python
-from .auth import create_access_token, get_current_user
+from .auth import (
+    get_current_user,
+    create_access_token,
+    get_password_hash,
+    verify_password
+)
 
+# Add these routes
 @app.post("/token")
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    # Verifica credenziali (esempio base)
-    if form_data.username != "admin" or form_data.password != "password":
-        raise HTTPException(status_code=400, detail="Credenziali non valide")
-    
-    access_token = create_access_token(data={"sub": form_data.username})
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends()
+):
+    user = authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password"
+        )
+    access_token = create_access_token(
+        data={"sub": user.username},
+        expires_delta=timedelta(minutes=30)
+    )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.get("/protected")
-async def protected_route(current_user: dict = Depends(get_current_user)):
-    return {"message": "Area protetta", "user": current_user}
+@app.get("/users/me/")
+async def read_users_me(
+    current_user: TokenData = Depends(get_current_user)
+):
+    return {"username": current_user.username}
 ```
 
-## 🧪 Nuovi Esempi di Simulazione
+## 🧪 Advanced Simulation Examples
 
-### 1. Fisica Avanzata (`backend/core.py`)
+### 1. Physics Simulation with Air Resistance
 ```python
-def simulate_advanced_physics(self, params):
+from scipy.integrate import solve_ivp
+
+def projectile_motion_with_drag(params: dict):
     """
-    Simula moto parabolico con resistenza dell'aria
+    Simulates projectile motion with air resistance
+    Returns: {
+        "time_points": [...],
+        "x_positions": [...], 
+        "y_positions": [...],
+        "velocities": [...]
+    }
     """
-    def projectile_motion(t, y, g, k):
+    def motion_equations(t, y, k, g):
         x, y, vx, vy = y
-        dx_dt = vx
-        dy_dt = vy
-        dvx_dt = -k * vx
-        dvy_dt = -g - k * vy
-        return [dx_dt, dy_dt, dvx_dt, dvy_dt]
+        dxdt = vx
+        dydt = vy
+        dvxdt = -k * vx * (vx**2 + vy**2)**0.5
+        dvydt = -g - k * vy * (vx**2 + vy**2)**0.5
+        return [dxdt, dydt, dvxdt, dvydt]
     
-    t_span = params.get('time_range', [0, 10])
-    y0 = params.get('initial_conditions', [0, 0, 20, 20])
+    # Default parameters
+    k = params.get('drag_coefficient', 0.1)
     g = params.get('gravity', 9.81)
-    k = params.get('air_resistance', 0.1)
+    v0 = params.get('initial_velocity', 20)
+    angle = params.get('angle', 45)
+    t_span = params.get('time_span', (0, 10))
     
-    sol = solve_ivp(projectile_motion, t_span, y0, args=(g, k))
+    # Convert angle to radians
+    angle_rad = np.radians(angle)
+    vx0 = v0 * np.cos(angle_rad)
+    vy0 = v0 * np.sin(angle_rad)
+    
+    # Solve differential equations
+    solution = solve_ivp(
+        motion_equations,
+        t_span,
+        [0, 0, vx0, vy0],
+        args=(k, g),
+        dense_output=True
+    )
+    
     return {
-        'x': sol.y[0].tolist(),
-        'y': sol.y[1].tolist(),
-        'vx': sol.y[2].tolist(),
-        'vy': sol.y[3].tolist()
+        "time_points": solution.t.tolist(),
+        "x_positions": solution.y[0].tolist(),
+        "y_positions": solution.y[1].tolist(),
+        "velocities": (solution.y[2]**2 + solution.y[3]**2)**0.5.tolist()
     }
 ```
 
-### 2. Quantistica Avanzata
+### 2. Quantum Circuit Simulation
 ```python
-def simulate_quantum_entanglement(self, params):
+from qiskit import QuantumCircuit, Aer, execute
+from qiskit.visualization import plot_histogram
+
+def simulate_quantum_circuit(params: dict):
     """
-    Simula entanglement quantistico con 2 qubit
+    Simulates quantum circuit with variable gates
+    Returns: {
+        "counts": {"00": x, "01": y, ...},
+        "histogram": "base64_encoded_image"
+    }
     """
-    qc = QuantumCircuit(2, 2)
-    qc.h(0)
-    qc.cx(0, 1)
+    n_qubits = params.get('qubits', 2)
+    gates = params.get('gates', ['h', 'cx'])
+    measurements = params.get('measurements', n_qubits)
+    
+    qc = QuantumCircuit(n_qubits, measurements)
+    
+    # Apply gates
+    for gate in gates:
+        if gate == 'h':
+            qc.h(0)
+        elif gate == 'x':
+            qc.x(0)
+        elif gate == 'cx':
+            if n_qubits >= 2:
+                qc.cx(0, 1)
+        # Add more gates as needed
+    
     qc.measure_all()
     
-    backend = Aer.get_backend('qasm_simulator')
-    result = execute(qc, backend, shots=1024).result()
-    counts = result.get_counts()
+    # Simulate
+    simulator = Aer.get_backend('qasm_simulator')
+    result = execute(qc, simulator, shots=1024).result()
+    counts = result.get_counts(qc)
+    
+    # Generate histogram
+    fig = plot_histogram(counts)
+    fig.savefig('quantum_histogram.png')
+    with open("quantum_histogram.png", "rb") as image_file:
+        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
     
     return {
-        "zero_zero": counts.get("00", 0),
-        "zero_one": counts.get("01", 0),
-        "one_zero": counts.get("10", 0),
-        "one_one": counts.get("11", 0)
+        "counts": counts,
+        "histogram": encoded_image
     }
 ```
 
-## 🛡️ Configurazione Sicurezza
+## 🛡️ Security Configuration
 
-### 1. HTTPS con Let's Encrypt
+### 1. HTTPS with Let's Encrypt
 ```bash
-sudo apt install certbot python3-certbot-nginx
+sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d yourdomain.com
+# Auto-renewal
+sudo certbot renew --dry-run
 ```
 
-### 2. Headers di Sicurezza in Nginx
+### 2. Security Headers in Nginx
 ```nginx
+# Add to server block
 add_header X-Frame-Options "SAMEORIGIN";
 add_header X-Content-Type-Options "nosniff";
 add_header X-XSS-Protection "1; mode=block";
-add_header Content-Security-Policy "default-src 'self'";
+add_header Content-Security-Policy "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'";
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 ```
 
-## 🚀 Workflow CI/CD Esempio
+## 🔄 CI/CD Pipeline
 
-### 1. File `.github/workflows/deploy.yml`
+### GitHub Actions (`.github/workflows/deploy.yml`)
 ```yaml
 name: Deploy AI_RIQA
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.10'
@@ -491,12 +288,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest
           
       - name: Run tests
         run: |
           pytest tests/
-          
-      - name: Deploy to server
+  
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Deploy to Production
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -505,47 +310,106 @@ jobs:
           script: |
             cd /var/www/AI_RIQA
             git pull origin main
-            ./start_prod.sh
+            docker-compose down
+            docker-compose up -d --build
 ```
 
-## 📊 Metriche e Monitoraggio
+## 📊 Monitoring & Metrics
 
-### 1. Integrazione Prometheus
+### 1. Prometheus Integration
 ```python
-from prometheus_fastapi_instrumentator import Instrumentator
+from prometheus_client import make_asgi_app, Counter, Histogram
+from fastapi import FastAPI
 
-Instrumentator().instrument(app).expose(app)
+# Create metrics
+REQUEST_COUNT = Counter(
+    'request_count',
+    'Total HTTP requests count',
+    ['method', 'endpoint', 'status_code']
+)
+
+REQUEST_LATENCY = Histogram(
+    'request_latency_seconds',
+    'Request latency in seconds',
+    ['method', 'endpoint']
+)
+
+# Add middleware to app
+@app.middleware("http")
+async def monitor_requests(request: Request, call_next):
+    start_time = time.time()
+    method = request.method
+    endpoint = request.url.path
+    
+    try:
+        response = await call_next(request)
+    except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 500).inc()
+        raise e
+    
+    duration = time.time() - start_time
+    REQUEST_LATENCY.labels(method, endpoint).observe(duration)
+    REQUEST_COUNT.labels(method, endpoint, response.status_code).inc()
+    
+    return response
+
+# Add metrics endpoint
+metrics_app = make_asgi_app()
+app.mount("/metrics", metrics_app)
 ```
 
-### 2. Dashboard Grafana
-- Importa dashboard ID 11074 per metriche FastAPI
-- Configura alert per errori 5xx
+### 2. Grafana Dashboard Setup
+1. Install Grafana: 
+   ```bash
+   sudo apt-get install -y grafana
+   sudo systemctl start grafana-server
+   ```
+2. Configure Prometheus as data source
+3. Import FastAPI dashboard (ID 11074)
 
-## 🆘 Troubleshooting Avanzato
+## 🚨 Troubleshooting
 
+### Common Issues and Solutions
+
+**1. Nginx 502 Bad Gateway**
 ```bash
-# Verifica sicurezza
-curl -I https://yourdomain.com
+# Check backend logs
+journalctl -u your_backend_service
 
-# Log in tempo reale
-sudo journalctl -u nginx -f
+# Test backend manually
+curl -v http://localhost:8000/health
+```
 
-# Test prestazioni
+**2. Database Connection Issues**
+```bash
+# PostgreSQL check
+sudo -u postgres psql -c "\l"
+
+# SQLite permissions
+chmod 664 your_db_file.db
+```
+
+**3. Performance Testing**
+```python
+# Create load_test.py
+from locust import HttpUser, task, between
+
+class AI_RIQAUser(HttpUser):
+    wait_time = between(1, 3)
+    
+    @task
+    def simulate_math(self):
+        self.client.post("/simulate/math", json={
+            "equation": "harmonic",
+            "initial_conditions": [1.0, 0.0]
+        })
+```
+
+Run with:
+```bash
 locust -f load_test.py
 ```
 
-> **Nota**: Per la configurazione completa di produzione, consultare `docs/production_setup.md`
-```
+---
 
-Questa guida include:
-1. Configurazione professionale Nginx con HTTPS
-2. Implementazione JWT completa
-3. Nuovi esempi scientifici avanzati
-4. Sicurezza e monitoraggio
-5. Automazione CI/CD
-6. Strumenti per il troubleshooting
-
-Per personalizzare:
-1. Sostituisci `yourdomain.com` con il tuo dominio
-2. Modifica le credenziali JWT
-3. Aggiungi i tuoi casi d'uso specifici nelle simulazioni
+**License**: AI_RIQA © 2025 by Martino Battista is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](http://creativecommons.org/licenses/by-nc-sa/4.0/)
