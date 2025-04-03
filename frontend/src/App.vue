@@ -10,8 +10,7 @@
     </select>
     <chat :messages="messages" @send="sendMessage" />
     <button @click="saveWork">Salva</button>
-    <button v-if="!user" @click="login">Login</button>
-    <button v-else @click="logout">Logout</button>
+    <button @click="login">Login</button>
     <developer-panel />
   </div>
 </template>
@@ -19,8 +18,6 @@
 <script>
 import Chat from './components/Chat.vue';
 import DeveloperPanel from './components/DeveloperPanel.vue';
-import { auth, googleProvider } from './firebase';
-import { signInWithPopup, signOut } from 'firebase/auth';
 
 export default {
   components: { Chat, DeveloperPanel },
@@ -37,30 +34,24 @@ export default {
       const response = await fetch('/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, client_id: this.user?.uid || 'anonymous' })
+        body: JSON.stringify({ 
+          message, 
+          client_id: this.user?.id || 'anonymous',
+          section: this.section
+        })
       });
       const data = await response.json();
       this.messages.push({ role: 'ai', content: JSON.stringify(data.result) });
     },
     async saveWork() {
-      // Simula salvataggio (da integrare con Google Drive API)
       console.log('Salvataggio su cloud o dispositivo...');
+      // Puoi implementare il salvataggio locale o con Netlify Functions
     },
-    async login() {
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
-        this.user = result.user;
-      } catch (error) {
-        console.error("Errore di login:", error);
-      }
-    },
-    async logout() {
-      await signOut(auth);
-      this.user = null;
+    login() {
+      // Semplice autenticazione mock (puoi implementare Netlify Identity dopo)
+      this.user = { id: 'demo-user', name: 'Demo User' };
+      alert("Modalità demo attiva - nessuna autenticazione reale");
     }
-  },
-  created() {
-    auth.onAuthStateChanged(user => this.user = user);
   }
 };
 </script>
