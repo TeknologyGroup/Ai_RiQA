@@ -1,9 +1,59 @@
+# backend/core.py
 from qiskit import QuantumCircuit, execute, Aer
 from scipy.integrate import solve_ivp
 import numpy as np
 
-class RIQACore:
-    # [...] Mantieni il codice esistente
+class RIQA_Core:
+    def __init__(self):
+        self.simulator = QuantumSimulator()
+        self.sessions = {}
+    
+    def process_message(self, message, section, client_id):
+        """Elabora i messaggi in base alla sezione selezionata"""
+        try:
+            if section == 'math':
+                response = self._handle_math(message)
+            elif section == 'quantum':
+                response = self._handle_quantum(message)
+            elif section == 'ballistic':
+                response = self._handle_ballistic(message)
+            elif section == 'biological':
+                response = self._handle_biological(message)
+            elif section == 'astral':
+                response = self._handle_astral(message)
+            else:
+                response = f"Sezione {section} non implementata"
+            
+            return {'status': 'success', 'result': response}
+        except Exception as e:
+            return {'status': 'error', 'result': str(e)}
+    
+    def _handle_math(self, message):
+        """Gestisce le richieste matematiche"""
+        # Implementa logica matematica avanzata
+        try:
+            result = eval(message)  # Nota: usa con cautela in produzione!
+            return f"Risultato matematico: {result}"
+        except:
+            return f"Impossibile valutare l'espressione: {message}"
+    
+    def _handle_quantum(self, message):
+        """Gestisce le richieste quantistiche"""
+        result = self.simulator.run_experiment(message)
+        return f"Risultato quantistico: {result}"
+    
+    def _handle_ballistic(self, message):
+        """Gestisce le simulazioni balistiche"""
+        simulation_result = run_simulation(message)
+        return f"Simulazione balistica: {simulation_result}"
+    
+    def _handle_biological(self, message):
+        """Gestisce le richieste biologiche"""
+        return f"Analisi biologica di: {message}"
+    
+    def _handle_astral(self, message):
+        """Gestisce le richieste astrali/matematica avanzata"""
+        return f"Calcolo astrale per: {message}"
     
     def simulate_quantum_entanglement(self, params: Dict) -> Dict:
         """Nuova simulazione di entanglement quantistico"""
