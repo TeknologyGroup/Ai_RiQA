@@ -1,7 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Header, WebSocket
+from fastapi import FastAPI, Depends, HTTPException, status, Header, WebSocket, Request
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from datetime import timedelta
 from typing import Optional
+from pathlib import Path
+import asyncio
 from .auth import (
     create_access_token,
     get_password_hash,
@@ -17,9 +21,24 @@ from .auth import (
 )
 from pydantic import BaseModel
 from .core import RIQACore
-import asyncio
+from .visualization import VisualizationEngine
+from .analysis import DataAnalyzer
+from .ai import AIModelHub
 
 app = FastAPI()
+
+# Configura CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Monta la cartella static per il frontend
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 core = RIQACore()
 
 # Modelli
@@ -36,6 +55,18 @@ class SimulationRequest(BaseModel):
     message: str
     section: str
     parameters: Optional[dict] = None
+
+class VisualizationRequest(BaseModel):
+    type: str = 'circuit'
+    data: dict
+
+class AnalysisRequest(BaseModel):
+    type: str = 'quantum'
+    data: dict
+
+class OptimizationRequest(BaseModel):
+    type: str
+    code: str
 
 # Endpoint pubblici
 @app.post("/register", response_model=Token)
@@ -126,6 +157,61 @@ async def websocket_simulation(websocket: WebSocket):
     finally:
         await websocket.close()
 
+# Nuovi endpoint per visualizzazione e analisi
+@app.post("/visualize")
+async def visualize_data(
+    request: VisualizationRequest,
+    current_user: TokenData = Depends(verify_user_key)
+):
+    try:
+        if request.type == 'circuit':
+            image = VisualizationEngine.plot_quantum_circuit(request.data.get('circuit', ''))
+        else:
+            image = VisualizationEngine.plot_simulation_results(request.data)
+        
+        return {"status": "success", "image": image}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+@app.post("/analyze")
+async def analyze_data(
+    request: AnalysisRequest,
+    current_user: TokenData = Depends(verify_user_key)
+):
+    try:
+        if request.type == 'quantum':
+            results = DataAnalyzer.analyze_quantum_results(request.data.get('counts', {}))
+        else:
+            results = DataAnalyzer.time_series_analysis(request.data)
+        
+        return {"status": "success", "results": results}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+@app.post("/optimize")
+async def optimize_code(
+    request: OptimizationRequest,
+    current_user: TokenData = Depends(verify_user_key)
+):
+    try:
+        if request.type == 'quantum':
+            result = AIModelHub().optimize_quantum_circuit(request.code)
+        else:
+            result = AIModelHub().solve_math_expression(request.code)
+        
+        return {"status": "success", "result": result}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
 # Endpoint protetti
 @app.get("/users/me")
 async def read_users_me(current_user: User = Depends(get_current_user)):
@@ -160,47 +246,17 @@ def get_user_from_db(username: str) -> Optional[User]:
 
 # Middleware
 @app.middleware("http")
-async def add_security_headers(request, call_next):
+async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-XSS-Protection"] = "1; mode=block"
     return response
 
-# Aggiungi queste route al tuo app.py esistente
-
-@app.post("/api/visualize")
-async def visualize_data(request: dict):
-    vis_type = request.get('type', 'circuit')
-    data = request.get('data', {})
-    
-    if vis_type == 'circuit':
-        image = VisualizationEngine.plot_quantum_circuit(data.get('circuit', ''))
-    else:
-        image = VisualizationEngine.plot_simulation_results(data)
-    
-    return {"image": image}
-
-@app.post("/api/analyze")
-async def analyze_data(request: dict):
-    analysis_type = request.get('type', 'quantum')
-    data = request.get('data', {})
-    
-    if analysis_type == 'quantum':
-        results = DataAnalyzer.analyze_quantum_results(data.get('counts', {}))
-    else:
-        results = DataAnalyzer.time_series_analysis(data)
-    
-    return results
-
-@app.post("/api/optimize")
-async def optimize_code(request: dict):
-    code_type = request.get('type')
-    code = request.get('code', '')
-    
-    if code_type == 'quantum':
-        result = AIModelHub().optimize_quantum_circuit(code)
-    else:
-        result = AIModelHub().solve_math_expression(code)
-    
-    return result
+# Frontend route - deve essere l'ultima route
+@app.get("/{full_path:path}")
+async def serve_frontend(request: Request, full_path: str):
+    static_path = Path("static") / "index.html"
+    if not static_path.exists():
+        raise HTTPException(status_code=404, detail="Not found")
+    return FileResponse(static_path)
