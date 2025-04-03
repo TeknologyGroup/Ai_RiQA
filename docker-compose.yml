@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///riqa_data.db
+      - HF_API_TOKEN=${HF_API_TOKEN}
+    volumes:
+      - ./backend:/app
+      - riqa_data:/data
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  ml-service:
+    image: tensorflow/serving:latest
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./ml_models:/models
+
+volumes:
+  riqa_data:
