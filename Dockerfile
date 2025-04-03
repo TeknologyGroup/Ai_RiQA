@@ -1,13 +1,16 @@
-FROM python:3.9-slim-buster
+FROM python:3.10-slim
 
-RUN apt-get update && apt-get install -y \
-    gfortran \
-    libopenblas-dev \
-    liblapack-dev
+WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY backend ./backend
+COPY ai ./ai
 
-CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "8000"]
+ENV FLASK_APP=backend.app
+ENV FLASK_ENV=production
+
+EXPOSE 5000
+
+CMD ["gunicorn", "--worker-class", "geventwebsocket.gunicorn.workers.GeventWebSocketWorker", "-w", "1", "-b", "0.0.0.0:5000", "backend.app:app"]
