@@ -1,4 +1,3 @@
-# Aggiungi queste importazioni in cima al file
 from qiskit import QuantumCircuit, execute, Aer
 from scipy.integrate import solve_ivp
 import numpy as np
