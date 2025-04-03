@@ -1,34 +1,36 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: riqa
+      POSTGRES_PASSWORD: riqa123
+      POSTGRES_DB: riqa_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+    build: .
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./ai:/app/ai
     environment:
-      - DATABASE_URL=sqlite:///riqa_data.db
-      - HF_API_TOKEN=${HF_API_TOKEN}
-    volumes:
-      - ./backend:/app
-      - riqa_data:/data
-
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "8080:80"
+      - DATABASE_URL=postgresql://riqa:riqa123@db:5432/riqa_db
+      - REDIS_URL=redis://redis:6379
     depends_on:
-      - backend
-
-  ml-service:
-    image: tensorflow/serving:latest
-    ports:
-      - "8501:8501"
-    volumes:
-      - ./ml_models:/models
+      - db
+      - redis
 
 volumes:
-  riqa_data:
+  redis_data:
+  postgres_data:
