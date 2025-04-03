@@ -166,3 +166,41 @@ async def add_security_headers(request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-XSS-Protection"] = "1; mode=block"
     return response
+
+# Aggiungi queste route al tuo app.py esistente
+
+@app.post("/api/visualize")
+async def visualize_data(request: dict):
+    vis_type = request.get('type', 'circuit')
+    data = request.get('data', {})
+    
+    if vis_type == 'circuit':
+        image = VisualizationEngine.plot_quantum_circuit(data.get('circuit', ''))
+    else:
+        image = VisualizationEngine.plot_simulation_results(data)
+    
+    return {"image": image}
+
+@app.post("/api/analyze")
+async def analyze_data(request: dict):
+    analysis_type = request.get('type', 'quantum')
+    data = request.get('data', {})
+    
+    if analysis_type == 'quantum':
+        results = DataAnalyzer.analyze_quantum_results(data.get('counts', {}))
+    else:
+        results = DataAnalyzer.time_series_analysis(data)
+    
+    return results
+
+@app.post("/api/optimize")
+async def optimize_code(request: dict):
+    code_type = request.get('type')
+    code = request.get('code', '')
+    
+    if code_type == 'quantum':
+        result = AIModelHub().optimize_quantum_circuit(code)
+    else:
+        result = AIModelHub().solve_math_expression(code)
+    
+    return result
