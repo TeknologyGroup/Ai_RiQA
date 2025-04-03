@@ -2,7 +2,7 @@
 ```markdown
 # Guida all'Installazione e Configurazione di AI_RIQA v2.0
 
-![AI_RIQA Logo](static/logo.png)
+!AI_RIQA 
 
 ## 📋 Prerequisiti
 - **Python 3.10+** con pip
