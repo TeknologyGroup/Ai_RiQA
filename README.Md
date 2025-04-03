@@ -1,93 +1,125 @@
-AI_RIQA - Chatbot Avanzato per Simulazioni Scientifiche
- ￼ ￼ ￼
-AI_RIQA è un chatbot innovativo che unisce intelligenza artificiale e simulazioni scientifiche, offrendo soluzioni interattive per matematica, balistica, fisica quantistica, biologia e astronomia. Con un’interfaccia grafica intuitiva e integrazione con Google per autenticazione e salvataggio, è progettato per utenti curiosi e sponsor che desiderano esplorare il potenziale dell’AI applicata alla scienza.
 
-Caratteristiche Principali
-	•	Simulazioni Avanzate: Risolvi equazioni, calcola traiettorie, simula qubit e altro.
-	•	Interfaccia Multipiattaforma: Disponibile su iOS, Android, Windows e web.
-	•	Autenticazione Google: Accedi facilmente tramite Firebase.
-	•	OCR Integrato: Carica immagini di equazioni e ottieni risposte immediate.
-	•	Risultati Condivisi: Salva e condividi i tuoi esperimenti con il database integrato.
 
-Demo
- Prova “Risolvi x^2 - 4 = 0” e guarda il chatbot in azione!
+```markdown
+# AI_RIQA - Scientific Simulation Web Application
 
-Installazione Automatica
-Per Utenti e Sponsor
-AI_RIQA offre un’installazione semplice per iOS, Android e Windows. Scarica e avvia il chatbot in pochi clic!
-iOS e Android
-	1	Vai su ai-riqa.com/download e scarica:
-	◦	iOS: .ipa tramite TestFlight.
-	◦	Android: .apk (attiva “Origini sconosciute”).
-	2	Apri l’app e accedi con Google.
-Windows
-	1	Scarica AI_RIQA_Setup.exe da ai-riqa.com/download.
-	2	Esegui l’installer e avvia dal desktop.
-Web
-	•	Usa la versione online su ai-riqa.com (ospitata su Firebase Hosting).
+![AI_RIQA Logo](https://via.placeholder.com/150) *(Replace with your actual logo)*
 
-Test per Sponsor
-Valuta AI_RIQA con questi semplici test:
-	1	Matematica: Invia “Risolvi x^2 - 4 = 0” → Soluzioni e grafico.
-	2	Balistica: “v0=20, angolo=45°” → Traiettoria.
-	3	Quantistica: “Simula 2 qubit” → Probabilità.
-	4	OCR: Carica un’immagine con “x^2”.
-	5	Condivisione: Visualizza i risultati salvati.
-Feedback? Contatta martinobattista@gmail.com.
+AI_RIQA is an advanced web application combining artificial intelligence with scientific simulations, offering browser-based solutions for mathematics, quantum physics, and data analysis.
 
-Installazione Manuale (Per Sviluppatori)
-Prerequisiti
-	•	Python 3.10+ (python.org)
-	•	Node.js/npm (nodejs.org)
-	•	Git (git-scm.com)
-Passaggi
-	1	Clona il Repository: git clone https://github.com/TeknologyGroup/AI_RIQA.git
-	2	cd AI_RIQA
-	3	
-	4	Backend: python -m venv venv
-	5	source venv/bin/activate  # Windows: venv\Scripts\activate
-	6	pip install -r requirements.txt
-	7	python backend/app.py
-	8	
-	9	Frontend: cd frontend
-	10	npm install
-	11	npm install firebase
-	12	npm run serve
-	13	
-	14	Database:
-	◦	SQLite (default): python backend/database.py
-	◦	PostgreSQL: Imposta DATABASE_TYPE e DATABASE_URL, poi esegui lo script.
-	15	Firebase:
-	◦	Configura un progetto su Firebase Console.
-	◦	Aggiorna frontend/src/firebase.js con le credenziali.
+## ✨ Key Features
 
-Struttura del Progetto
+- **Scientific Simulations**
+  - Complex equation solving
+  - Quantum computing simulations (qubits, algorithms)
+  - Advanced data analysis
+
+- **Integrated Technologies**
+  - Interactive Vue.js frontend
+  - High-performance FastAPI backend
+  - JWT Authentication
+  - SQLite/PostgreSQL database
+
+- **AI Capabilities**
+  - Python code generation
+  - Algorithm optimization
+  - Natural language processing
+
+## 🚀 Quick Start
+
+```bash
+# Run locally with Docker
+docker-compose up --build
+```
+Access at: [http://localhost:8000](http://localhost:8000)
+
+## 🛠 Installation & Deployment
+
+### Prerequisites
+- Docker 20.10+
+- Docker Compose 2.0+
+
+### Docker Deployment (Recommended)
+```bash
+git clone https://github.com/TeknologyGroup/AI_RIQA.git
+cd AI_RIQA
+docker-compose up --build
+```
+
+### Manual Installation
+```bash
+# Backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn backend.app:app --host 0.0.0.0 --port 8000
+
+# Frontend (in separate terminal)
+cd frontend
+npm install
+npm run serve
+```
+
+## 🔍 Example Tests
+
+| Category          | Sample Input                 | Expected Output            |
+|-------------------|------------------------------|----------------------------|
+| Mathematics       | `x^2 - 4 = 0`               | Solutions ±2 with graph    |
+| Quantum Physics   | `Simulate 2 entangled qubits`| Density matrix             |
+| Code Generation   | `Create a Python factorial function` | Optimized code     |
+
+## ⚙️ Technical Architecture
+
+```
 AI_RIQA/
-├── backend/         # Server FastAPI e database
-├── core/            # Logica delle simulazioni
-├── frontend/        # Interfaccia Vue.js
-├── client.py        # Script per test remoti
-├── requirements.txt # Dipendenze Python
-└── README.md
+├── backend/          # FastAPI (Python)
+│   ├── app.py        # Main server
+│   ├── core.py       # Simulation logic
+│   └── database.py   # Data management
+├── frontend/         # Vue.js interface
+│   ├── src/          # Core components
+│   └── public/       # Static assets
+├── ai/               # Generative models
+├── docker-compose.yml # Container setup
+└── Dockerfile        # Application build
+```
 
-Contribuire
-Vuoi migliorare AI_RIQA? Siamo aperti a contributi!
-	1	Forka il repository.
-	2	Crea un branch: git checkout -b feature/tua-idea.
-	3	Committa le modifiche: git commit -m "Aggiunta funzionalità".
-	4	Pusha: git push origin feature/tua-idea.
-	5	Apri una Pull Request.
+## 🌐 Production Deployment
 
-Licenza
-Distribuito sotto la Licenza MIT. Creato da Martino Battista.
+1. **Render.com** (Recommended for simplicity):
+   - Connect your GitHub repository
+   - Set environment variables:
+     ```
+     DATABASE_URL=postgresql://user:pass@host/db
+     SECRET_KEY=your-secret-key
+     ```
+   - Start deployment
 
-Contatti
-	•	Email: martinobattista@gmail.com
-	•	GitHub: TeknologyGroup
-⭐ Se ti piace AI_RIQA, metti una stella al repository! ⭐
+2. **Custom VPS**:
+   ```bash
+   docker-compose -f docker-compose.prod.yml up --build -d
+   ```
 
-Note
-	•	Immagini: Ho usato placeholder (via.placeholder.com). Sostituiscile con screenshot reali o un logo quando disponibile.
-	•	Link: ai-riqa.com è un placeholder. Configura un dominio o usa GitHub Pages/Firebase Hosting.
-	•	Badge: Personalizzabili su shields.io quando il progetto sarà pubblico.
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your branch: `git checkout -b feature/new-feature`
+3. Commit changes: `git commit -m "Add new feature"`
+4. Push: `git push origin feature/new-feature`
+5. Open a Pull Request
+
+## 📜 License
+
+AI_RIQA © 2025 by Martino Battista is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+## 📬 Contact
+
+- Created by: **Martino Battista**
+- Email: [martinobattista@gmail.com](mailto:martinobattista@gmail.com)
+- GitHub: [TeknologyGroup](https://github.com/TeknologyGroup)
+
+⭐ Star this repository if you find the project useful! ⭐
+```
 
