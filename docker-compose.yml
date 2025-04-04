@@ -1,22 +1,6 @@
 version: '3.8'
 
 services:
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: riqa
-      POSTGRES_PASSWORD: riqa123
-      POSTGRES_DB: riqa_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   backend:
     build: .
     ports:
@@ -25,12 +9,14 @@ services:
       - ./backend:/app/backend
       - ./ai:/app/ai
     environment:
-      - DATABASE_URL=postgresql://riqa:riqa123@db:5432/riqa_db
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - db
-      - redis
+      - DATABASE_URL=sqlite:////app/riqa.db
+      - DEBUG=true
 
-volumes:
-  redis_data:
-  postgres_data:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
