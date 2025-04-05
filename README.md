@@ -110,13 +110,13 @@ AI_RIQA/
 
 ## 📜 License
 
-AI_RIQA © 2025 by Martino Battista is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+Ai_RiQA © 2025 by Martino Battista is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ## 📬 Contact
 
-- Created by: **Martino Battista**
+- Created by: **Martino Battista** (https://www.linkedin.com/in/martino-battista)
 - Email: [martinobattista@gmail.com](mailto:martinobattista@gmail.com)
 - GitHub: [TeknologyGroup](https://github.com/TeknologyGroup)
 
