@@ -1,17 +1,17 @@
-import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import { createPinia } from 'pinia'
-import App from './App.vue'
-import './assets/tailwind.css'
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import { createPinia } from 'pinia';
+import App from './App.vue';
+import './assets/tailwind.css';
 
 // Importa i componenti
-import HomePage from './views/HomePage.vue'
-import SimulationPage from './views/SimulationPage.vue'
-import QuantumPage from './views/QuantumPage.vue'
-import VisualizationPage from './views/VisualizationPage.vue'
-import AnalysisPage from './views/AnalysisPage.vue'
-import LoginPage from './views/LoginPage.vue'
-import RegisterPage from './views/RegisterPage.vue'
+import HomePage from './views/HomePage.vue';
+import SimulationPage from './views/SimulationPage.vue';
+import QuantumPage from './views/QuantumPage.vue';
+import VisualizationPage from './views/VisualizationPage.vue';
+import AnalysisPage from './views/AnalysisPage.vue';
+import LoginPage from './views/LoginPage.vue';
+import RegisterPage from './views/RegisterPage.vue';
 
 // Configurazione del router
 const router = createRouter({
@@ -25,23 +25,23 @@ const router = createRouter({
     { path: '/login', component: LoginPage },
     { path: '/register', component: RegisterPage }
   ]
-})
+});
 
 // Middleware di autenticazione
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('access_token')
+  const isAuthenticated = localStorage.getItem('access_token');
   
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/login')
+    next('/login');
   } else {
-    next()
+    next();
   }
-})
+});
 
 // Crea l'app Vue
-const app = createApp(App)
-const pinia = createPinia()
+const app = createApp(App);
+const pinia = createPinia();
 
-app.use(router)
-app.use(pinia)
-app.mount('#app')
+app.use(router);
+app.use(pinia);
+app.mount('#app');
