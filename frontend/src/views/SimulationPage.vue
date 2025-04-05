@@ -58,60 +58,59 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { io } from 'socket.io-client'
+import { ref, onMounted, onUnmounted } from 'vue';
+import { io } from 'socket.io-client';
 
 export default {
+  name: 'SimulationPage',
   setup() {
-    const simType = ref('wormhole')
-    const parameters = ref('{}')
-    const isRunning = ref(false)
-    const progress = ref(0)
-    const result = ref(null)
-    const error = ref(null)
-    const socket = ref(null)
+    const simType = ref('wormhole');
+    const parameters = ref('{}');
+    const isRunning = ref(false);
+    const progress = ref(0);
+    const result = ref(null);
+    const error = ref(null);
+    let socket = null;
 
     const startSimulation = () => {
-      isRunning.value = true
-      progress.value = 0
-      result.value = null
-      error.value = null
+      isRunning.value = true;
+      progress.value = 0;
+      result.value = null;
+      error.value = null;
       
       try {
-        const params = JSON.parse(parameters.value)
-        socket.value.emit('start_simulation', {
+        const params = JSON.parse(parameters.value);
+        socket.emit('start_simulation', {
           type: simType.value,
           ...params
-        })
+        });
       } catch (e) {
-        error.value = 'Invalid JSON parameters'
-        isRunning.value = false
+        error.value = 'Invalid JSON parameters';
+        isRunning.value = false;
       }
-    }
+    };
 
     onMounted(() => {
-      socket.value = io(process.env.VUE_APP_WS_URL)
+      socket = io(process.env.VUE_APP_WS_URL || 'http://localhost:3000');
       
-      socket.value.on('simulation_update', (data) => {
-        progress.value = data.progress
-      })
+      socket.on('simulation_update', (data) => {
+        progress.value = data.progress;
+      });
       
-      socket.value.on('simulation_complete', (data) => {
-        isRunning.value = false
-        result.value = data
-      })
+      socket.on('simulation_complete', (data) => {
+        isRunning.value = false;
+        result.value = data;
+      });
       
-      socket.value.on('simulation_error', (err) => {
-        isRunning.value = false
-        error.value = err.error
-      })
-    })
+      socket.on('simulation_error', (err) => {
+        isRunning.value = false;
+        error.value = err.error;
+      });
+    });
 
     onUnmounted(() => {
-      if (socket.value) {
-        socket.value.disconnect()
-      }
-    })
+      if (socket) socket.disconnect();
+    });
 
     return {
       simType,
@@ -121,7 +120,7 @@ export default {
       result,
       error,
       startSimulation
-    }
+    };
   }
-}
+};
 </script>
