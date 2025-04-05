@@ -3,7 +3,6 @@
 ```markdown
 # Ai_RiQA - Scientific Simulation Web Application
 
-![Ai_RiQA Logo] https://pin.it/RzXRTlfUY
 
 Ai_RiQA is an advanced web application combining artificial intelligence with scientific simulations, offering browser-based solutions for mathematics, quantum physics, and data analysis.
 
