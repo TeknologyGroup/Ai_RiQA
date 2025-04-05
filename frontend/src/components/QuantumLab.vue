@@ -29,57 +29,58 @@
 </template>
 
 <script>
-export default {
-  data() {
+import { defineComponent, reactive } from 'vue';
+
+export default defineComponent({
+  name: 'QuantumLab',
+  setup(_, { emit }) {
+    const availableGates = ['h', 'cx', 'x', 'y', 'z', 'swap', 'rx', 'ry', 'rz'];
+    const params = reactive({
+      n_qubits: 2,
+      shots: 1024,
+      gates: ['h', 'cx']
+    });
+
+    const runSimulation = () => {
+      emit('run-simulation', params);
+    };
+
     return {
-      availableGates: ['h', 'cx', 'x', 'y', 'z', 'swap', 'rx', 'ry', 'rz'],
-      params: {
-        n_qubits: 2,
-        shots: 1024,
-        gates: ['h', 'cx']
-      }
-    }
-  },
-  methods: {
-    runSimulation() {
-      this.$emit('run-simulation', this.params);
-    }
+      availableGates,
+      params,
+      runSimulation
+    };
   }
-}
+});
 </script>
 
 <style scoped>
+/* Stile invariato */
 .quantum-lab {
   padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-
 .control-group {
   margin-bottom: 1rem;
 }
-
 .control-group label {
   display: block;
   margin-bottom: 0.5rem;
 }
-
 .control-group input {
   padding: 0.5rem;
   width: 100%;
 }
-
 .gates-section {
   margin-top: 1.5rem;
 }
-
 .gates-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
   margin-top: 0.5rem;
 }
-
 .run-btn {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
@@ -89,7 +90,6 @@ export default {
   border-radius: 4px;
   cursor: pointer;
 }
-
 .run-btn:hover {
   background-color: #2980b9;
 }
