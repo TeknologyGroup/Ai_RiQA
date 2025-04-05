@@ -1,11 +1,11 @@
 
 
 ```markdown
-# AI_RIQA - Scientific Simulation Web Application
+# Ai_RiQA - Scientific Simulation Web Application
 
-![AI_RIQA Logo](https://via.placeholder.com/150) *(Replace with your actual logo)*
+![Ai_RiQA Logo]([https://via.placeholder.com/150](https://pin.it/RzXRTlfUY)*
 
-AI_RIQA is an advanced web application combining artificial intelligence with scientific simulations, offering browser-based solutions for mathematics, quantum physics, and data analysis.
+Ai_RiQA is an advanced web application combining artificial intelligence with scientific simulations, offering browser-based solutions for mathematics, quantum physics, and data analysis.
 
 ## ✨ Key Features
 
@@ -42,7 +42,7 @@ Access at: [http://localhost:8000](http://localhost:8000)
 ### Docker Deployment (Recommended)
 ```bash
 git clone https://github.com/TeknologyGroup/AI_RIQA.git
-cd AI_RIQA
+cd Ai_RiQA
 docker-compose up --build
 ```
 
@@ -71,7 +71,7 @@ npm run serve
 ## ⚙️ Technical Architecture
 
 ```
-AI_RIQA/
+Ai_RiQA/
 ├── backend/          # FastAPI (Python)
 │   ├── app.py        # Main server
 │   ├── core.py       # Simulation logic
