@@ -29,51 +29,51 @@
 </template>
 
 <script>
-export default {
-  data() {
+import { defineComponent, reactive } from 'vue';
+
+export default defineComponent({
+  name: 'SimulationControls',
+  setup(_, { emit }) {
+    const params = reactive({
+      type: 'math'
+    });
+
+    const runSimulation = () => {
+      emit('run', params);
+    };
+
     return {
-      params: {
-        type: 'math',
-        // Altri parametri specifici per tipo
-      }
-    }
-  },
-  methods: {
-    runSimulation() {
-      this.$emit('run', this.params);
-    }
+      params,
+      runSimulation
+    };
   }
-}
+});
 </script>
 
 <style scoped>
+/* Stile invariato */
 .simulation-controls {
   padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
-
 .control-group {
   margin-bottom: 1rem;
 }
-
 .control-group label {
   display: block;
   margin-bottom: 0.5rem;
 }
-
 .control-group select {
   padding: 0.5rem;
   width: 100%;
 }
-
 .params-group {
   margin-top: 1rem;
   padding: 1rem;
   background-color: #f8f9fa;
   border-radius: 4px;
 }
-
 .run-btn {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
